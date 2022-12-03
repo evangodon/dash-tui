@@ -1,25 +1,24 @@
 
 tabsList = [
-  "Main",
+  "Home",
   "Calendar",
   "Issues",
   "Pull Requests",
 ]
 
 [modules.calendar]
-  tab = "Main"
+  tab = "Calendar"
   title = "ls"
   exec = "cal"
 
-
-[modules.weather]
-  tab = "Main"
-  title = "weather"
-  exec = "curl --silent wttr.in/montreal?format=4"
-
 [modules.date]
-  tab = "Main"
+  tab = "Home"
   title = "list files"
   exec = "date +%c"
+
+[modules.weather]
+  tab = "Home"
+  title = "weather"
+  exec = "curl --silent wttr.in/montreal?format=4"
 
 [settings]

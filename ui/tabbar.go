@@ -7,29 +7,39 @@ import (
 )
 
 var tabStyle = lg.NewStyle().
-	Border(lg.NormalBorder(), true).
-	BorderForeground(color.primary).
 	Padding(0, 1)
 
-var activeTabStyle = tabStyle.Copy().Border(lg.DoubleBorder(), true)
+var activeTabStyle = tabStyle.Copy().
+	Background(color.primary)
 
-func (u UI) BuildTabs(activeTab int, tabs ...string) string {
+var tabBottomBorder = lg.Border{
+	Bottom: "🬂",
+}
+
+var tabbarStyle = lg.NewStyle().
+	Border(tabBottomBorder, false, false, true).
+	BorderForeground(color.primary)
+
+func (cb ComponentBuilder) BuildTabs(activeTab int, tabs ...string) string {
 	doc := strings.Builder{}
 
-	rendered := []string{}
+	tabboxes := []string{}
 	for index, tab := range tabs {
 		if index == activeTab {
-			rendered = append(rendered, activeTabStyle.Render(tab))
+			tabboxes = append(tabboxes, activeTabStyle.Render(tab))
 			continue
 		}
-		rendered = append(rendered, tabStyle.Render(tab))
+		tabboxes = append(tabboxes, tabStyle.Render(tab))
 	}
 
 	row := lg.JoinHorizontal(
 		lg.Top,
-		rendered...,
+		strings.Join(tabboxes, " • "),
 	)
 
-	doc.WriteString(row + "\n\n")
+	out := tabbarStyle.Width(cb.window.Width).Render(row)
+
+	doc.WriteString(out)
+	doc.WriteString("\n\n")
 	return doc.String()
 }

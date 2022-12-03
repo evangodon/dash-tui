@@ -1,7 +1,16 @@
 package ui
 
-type UI struct{}
+type Window struct {
+	Height int
+	Width  int
+}
 
-func New() *UI {
-	return &UI{}
+type ComponentBuilder struct {
+	window Window
+}
+
+func New(w Window) *ComponentBuilder {
+	return &ComponentBuilder{
+		window: w,
+	}
 }
