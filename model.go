@@ -1,9 +1,12 @@
 package main
 
 import (
+	"sort"
 	"strings"
 
 	tea "github.com/charmbracelet/bubbletea"
+
+	"github.com/evangodon/dash/module"
 	"github.com/evangodon/dash/ui"
 )
 
@@ -11,27 +14,50 @@ type model struct {
 	activeTab int
 	tabs      []string
 	config    *config
+	sub       chan module.Module
 }
+
+type modch chan module.Module
 
 func initialModel() model {
 	cfg := newConfig()
-	for _, m := range cfg.Modules {
-		m.Run()
-	}
-
 	return model{
 		activeTab: 0,
 		tabs:      cfg.TabsList,
 		config:    cfg,
+		sub:       make(modch),
+	}
+}
+
+func runAllModules(m model) tea.Cmd {
+	return func() tea.Msg {
+		for _, termMod := range m.config.Modules {
+			go func(termMod *module.Module) {
+				termMod.Run()
+				m.sub <- *termMod
+			}(termMod)
+		}
+		return nil
+	}
+}
+
+func waitForModuleUpdate(sub modch) tea.Cmd {
+	return func() tea.Msg {
+		return <-sub
 	}
 }
 
 func (m model) Init() tea.Cmd {
-	return nil
+	return tea.Batch(
+		waitForModuleUpdate(m.sub),
+		runAllModules(m),
+	)
 }
 
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
+	case module.Module:
+		return m, waitForModuleUpdate(m.sub)
 	case tea.KeyMsg:
 		switch msg.String() {
 		case "tab":
@@ -62,9 +88,22 @@ func (m model) View() string {
 
 	doc := strings.Builder{}
 	doc.WriteString(components.BuildTabs(m.activeTab, m.tabs...))
-	for _, m := range m.config.Modules {
-		doc.WriteString(m.Title + ":\n")
-		doc.WriteString(m.Output.String())
+
+	keys := make([]string, len(m.config.Modules))
+	i := 0
+	for k := range m.config.Modules {
+		keys = append(keys, k)
+		i++
+	}
+
+	sort.Strings(keys)
+
+	for _, k := range keys {
+		module := m.config.Modules[k]
+
+		if module != nil {
+			doc.WriteString(module.Output.String())
+		}
 	}
 
 	return doc.String()

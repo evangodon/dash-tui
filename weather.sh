@@ -1,3 +1,4 @@
 #! /bin/sh
 
-curl -s 'wttr.in/montreal?format=3'
+echo hey this is the weather
+# curl -s 'wttr.in/montreal?format=4'

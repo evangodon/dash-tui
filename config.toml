@@ -6,16 +6,20 @@ tabsList = [
   "Pull Requests",
 ]
 
-[modules.hello-world]
-  title = "hello world"
+[modules.calendar]
   tab = "Main"
-  file = "./ls.sh"
+  title = "ls"
+  exec = "cal"
 
 
 [modules.weather]
-  title = "weather"
   tab = "Main"
-  file = "./weather.sh"
+  title = "weather"
+  exec = "curl --silent wttr.in/montreal?format=4"
 
+[modules.date]
+  tab = "Main"
+  title = "list files"
+  exec = "date +%c"
 
 [settings]
