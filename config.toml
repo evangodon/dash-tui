@@ -1,0 +1,21 @@
+
+tabsList = [
+  "Main",
+  "Calendar",
+  "Issues",
+  "Pull Requests",
+]
+
+[modules.hello-world]
+  title = "hello world"
+  tab = "Main"
+  file = "./ls.sh"
+
+
+[modules.weather]
+  title = "weather"
+  tab = "Main"
+  file = "./weather.sh"
+
+
+[settings]
