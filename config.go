@@ -9,8 +9,8 @@ import (
 )
 
 type config struct {
-	TabsList []string
-	Modules  map[string]*module.Module
+	Tabs    []string
+	Modules map[string]*module.Module
 }
 
 func newConfig() *config {

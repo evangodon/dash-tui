@@ -1,24 +1,28 @@
 
-tabsList = [
+tabs = [
   "Home",
   "Calendar",
-  "Issues",
-  "Pull Requests",
+  "Commits",
 ]
 
 [modules.calendar]
   tab = "Calendar"
-  title = "ls"
-  exec = "cal"
+  title = "Calendar"
+  exec = "cal --color=always"
 
 [modules.date]
   tab = "Home"
-  title = "list files"
+  title = "Date"
   exec = "date +%c"
 
 [modules.weather]
   tab = "Home"
-  title = "weather"
-  exec = "curl --silent wttr.in/montreal?format=4"
+  title = "Weather"
+  exec = "curl -s wttr.in/montreal?format=4"
+
+[modules.git]
+  tab = "Commits"
+  title = "commits"
+  exec = "git log --oneline --color"
 
 [settings]

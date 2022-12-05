@@ -13,5 +13,8 @@ var boxStyle = lg.NewStyle().
 	Render
 
 func (cb ComponentBuilder) NewModuleBox(mod module.Module) string {
-	return boxStyle(mod.Output.String())
+	b := newBoxWithTitle()
+	width := max(mod.GetWidthOfOutput(), 30)
+
+	return b.Render(mod.Title, mod.Output.String(), width)
 }

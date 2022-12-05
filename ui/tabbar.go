@@ -10,7 +10,8 @@ var tabStyle = lg.NewStyle().
 	Padding(0, 1)
 
 var activeTabStyle = tabStyle.Copy().
-	Background(color.primary)
+	Background(color.primary).
+	Bold(true)
 
 var tabBottomBorder = lg.Border{
 	Bottom: "🬂",
@@ -34,12 +35,12 @@ func (cb ComponentBuilder) BuildTabs(activeTab int, tabs ...string) string {
 
 	row := lg.JoinHorizontal(
 		lg.Top,
-		strings.Join(tabboxes, " • "),
+		strings.Join(tabboxes, " "),
 	)
 
 	out := tabbarStyle.Width(cb.window.Width).Render(row)
 
 	doc.WriteString(out)
-	doc.WriteString("\n\n")
+	doc.WriteString("\n")
 	return doc.String()
 }

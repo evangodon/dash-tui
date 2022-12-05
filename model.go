@@ -26,18 +26,29 @@ func initialModel() model {
 	cfg := newConfig()
 	return model{
 		activeTab:     0,
-		activeTabName: cfg.TabsList[0],
-		tabs:          cfg.TabsList,
+		activeTabName: cfg.Tabs[0],
+		tabs:          cfg.Tabs,
 		config:        cfg,
 		sub:           make(modch),
 	}
 }
 
+// Get modules that will be visible on this tab
 func (m model) getActiveModules() []*module.Module {
+	allModules := m.config.Modules
 	activeModules := []*module.Module{}
-	for _, mod := range m.config.Modules {
-		if mod.Tab == m.activeTabName {
-			activeModules = append(activeModules, mod)
+
+	keys := make([]string, len(m.config.Modules))
+	i := 0
+	for k := range m.config.Modules {
+		keys[i] = k
+		i++
+	}
+	sort.Strings(keys)
+
+	for _, k := range keys {
+		if allModules[k].Tab == m.activeTabName {
+			activeModules = append(activeModules, allModules[k])
 		}
 	}
 	return activeModules
@@ -108,17 +119,9 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 func (m model) View() string {
 	cb := ui.New(m.window)
 	doc := strings.Builder{}
-	doc.WriteString(ui.Italic("Dash tui"))
+	doc.WriteString(ui.AppTitle("Dash tui"))
 	doc.WriteString("\n\n")
 	doc.WriteString(cb.BuildTabs(m.activeTab, m.tabs...))
-
-	keys := make([]string, len(m.config.Modules))
-	i := 0
-	for k := range m.config.Modules {
-		keys = append(keys, k)
-		i++
-	}
-	sort.Strings(keys)
 
 	activeModules := m.getActiveModules()
 

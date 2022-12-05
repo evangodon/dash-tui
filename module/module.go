@@ -31,3 +31,20 @@ func (m *Module) Run() {
 		log.Fatal("command failed", err)
 	}
 }
+
+func (m *Module) GetWidthOfOutput() int {
+	if m.Output == nil {
+		return 0
+	}
+
+	lines := strings.Split(m.Output.String(), "\n")
+
+	longest := lines[0]
+	for _, s := range lines {
+		if len(s) > len(longest) {
+			longest = s
+		}
+	}
+
+	return len(longest)
+}
