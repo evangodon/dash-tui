@@ -2,9 +2,12 @@
 
 - [ ] Validate config file and all modules
 - [ ] use xdg paths for config
+- [ ] Add loading state to modules
 - [ ] Get true width and height of output
 
 # IN-PROGRESS
+
+- [ ] Add layout engine
 
 # DONE
 

@@ -20,15 +20,14 @@ func (m *Module) Run() {
 		log.Fatal("file not set for module: ", m.Title)
 	}
 	m.Output = new(bytes.Buffer)
-	commandStr := strings.Split(m.Exec, " ")
-	cmd := exec.Command(commandStr[0], commandStr[1:]...)
+	cmd := exec.Command("sh", "-c", m.Exec)
 
 	cmd.Stdout = m.Output
 	cmd.Stderr = m.Output
 
 	err := cmd.Run()
 	if err != nil {
-		log.Fatal("command failed", err)
+		m.Error = err
 	}
 }
 
