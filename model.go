@@ -5,7 +5,6 @@ import (
 	"strings"
 
 	tea "github.com/charmbracelet/bubbletea"
-	lg "github.com/charmbracelet/lipgloss"
 
 	"github.com/evangodon/dash/module"
 	"github.com/evangodon/dash/ui"
@@ -36,9 +35,8 @@ func initialModel() model {
 // Get modules that will be visible on this tab
 func (m model) getActiveModules() []*module.Module {
 	allModules := m.config.Modules
-	activeModules := []*module.Module{}
 
-	keys := make([]string, len(m.config.Modules))
+	keys := make([]string, len(allModules))
 	i := 0
 	for k := range m.config.Modules {
 		keys[i] = k
@@ -46,6 +44,7 @@ func (m model) getActiveModules() []*module.Module {
 	}
 	sort.Strings(keys)
 
+	activeModules := []*module.Module{}
 	for _, k := range keys {
 		if allModules[k].Tab == m.activeTabName {
 			activeModules = append(activeModules, allModules[k])
@@ -125,14 +124,8 @@ func (m model) View() string {
 
 	activeModules := m.getActiveModules()
 
-	boxes := make([]string, len(activeModules))
-	for _, mod := range activeModules {
-		if mod != nil {
-			boxes = append(boxes, cb.NewModuleBox(*mod))
-		}
-	}
-
-	doc.WriteString(lg.JoinHorizontal(lg.Top, boxes...))
+	tab := cb.NewTabLayout(activeModules)
+	doc.WriteString(tab)
 
 	return doc.String()
 }

@@ -2,9 +2,10 @@ package module
 
 import (
 	"bytes"
-	"log"
+	"fmt"
 	"os/exec"
-	"strings"
+
+	lg "github.com/charmbracelet/lipgloss"
 )
 
 type Module struct {
@@ -17,7 +18,7 @@ type Module struct {
 
 func (m *Module) Run() {
 	if m.Exec == "" {
-		log.Fatal("file not set for module: ", m.Title)
+		panic(fmt.Errorf("file not set for module: %v", m.Title))
 	}
 	m.Output = new(bytes.Buffer)
 	cmd := exec.Command("sh", "-c", m.Exec)
@@ -35,15 +36,17 @@ func (m *Module) GetWidthOfOutput() int {
 	if m.Output == nil {
 		return 0
 	}
+	return lg.Width(m.Output.String())
+}
 
-	lines := strings.Split(m.Output.String(), "\n")
+var (
+	borderWidth  = 2
+	paddingWidth = 2
+)
 
-	longest := lines[0]
-	for _, s := range lines {
-		if len(s) > len(longest) {
-			longest = s
-		}
+func (m *Module) GetRenderedOutput() int {
+	if m.Output == nil {
+		return 0
 	}
-
-	return len(longest)
+	return lg.Width(m.Output.String()) + borderWidth + paddingWidth
 }

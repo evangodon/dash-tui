@@ -15,7 +15,7 @@ func newBoxWithTitle() BoxWithLabel {
 	return BoxWithLabel{
 		BoxStyle: lg.NewStyle().
 			Border(lg.RoundedBorder()).
-			BorderForeground(color.primary).
+			BorderForeground(color.border).
 			Padding(0, 1),
 
 		LabelStyle: lg.NewStyle().
@@ -26,7 +26,7 @@ func newBoxWithTitle() BoxWithLabel {
 	}
 }
 
-func (b BoxWithLabel) Render(label, content string, width int) string {
+func (b BoxWithLabel) Render(label, content string, width int, height int) string {
 	var (
 		border          = b.BoxStyle.GetBorderStyle()
 		topBorderStyler = lg.NewStyle().
@@ -46,6 +46,7 @@ func (b BoxWithLabel) Render(label, content string, width int) string {
 	bottom := b.BoxStyle.Copy().
 		BorderTop(false).
 		Width(width).
+		Height(height).
 		Render(content)
 
 	return top + "\n" + bottom
