@@ -90,27 +90,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.window.Height = msg.Height
 		m.window.Width = msg.Width
 	case tea.KeyMsg:
-		switch msg.String() {
-		// TODO: clean up tab cases
-		case "tab":
-			if m.activeTab < len(m.tabs)-1 {
-				m.activeTab++
-			} else {
-				m.activeTab = 0
-			}
-			m.activeTabName = m.tabs[m.activeTab]
-			return m, runAllModules(m)
-		case "shift+tab":
-			if m.activeTab > 0 {
-				m.activeTab--
-			} else {
-				m.activeTab = len(m.tabs) - 1
-			}
-			m.activeTabName = m.tabs[m.activeTab]
-			return m, runAllModules(m)
-		case "ctrl+c", "q":
-			return m, tea.Quit
-		}
+		return m.handleKey(msg)
 	}
 	return m, nil
 }
