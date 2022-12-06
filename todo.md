@@ -3,11 +3,13 @@
 - [ ] Validate config file and all modules
 - [ ] use xdg paths for config
 - [ ] Add loading state to modules
-- [ ] Use viewport from bubbles lib to fix height
+
+---
+
+- [ ] improve layout renderer
+- [ ] Add status bar at bottom
 
 # IN-PROGRESS
-
-- [ ] Add layout engine
 
 # DONE
 
@@ -19,3 +21,5 @@
 - [x] Prevent mutation of modules?
 - [x] create modulebox with title
 - [x] Get true width and height of output
+- [?] Use viewport from bubbles lib to fix height
+- [x] Add layout engine

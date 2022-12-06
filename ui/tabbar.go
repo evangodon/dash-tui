@@ -6,24 +6,15 @@ import (
 	lg "github.com/charmbracelet/lipgloss"
 )
 
-var tabStyle = lg.NewStyle().
-	Padding(0, 1)
-
-var activeTabStyle = tabStyle.Copy().
-	Background(color.primary).
-	Bold(true)
-
-var tabBottomBorder = lg.Border{
-	Bottom: "🬂",
-}
-
-var tabbarStyle = lg.NewStyle().
-	Border(tabBottomBorder, false, false, true).
-	BorderForeground(color.primary)
+var (
+	tabContainer = lg.NewStyle()
+	tabGap       = tabStyle.Copy().
+			BorderTop(false).
+			BorderLeft(false).
+			BorderRight(false)
+)
 
 func (cb ComponentBuilder) BuildTabs(activeTab int, tabs ...string) string {
-	doc := strings.Builder{}
-
 	tabboxes := []string{}
 	for index, tab := range tabs {
 		if index == activeTab {
@@ -35,12 +26,25 @@ func (cb ComponentBuilder) BuildTabs(activeTab int, tabs ...string) string {
 
 	row := lg.JoinHorizontal(
 		lg.Top,
-		strings.Join(tabboxes, " "),
+		tabboxes...,
 	)
 
-	out := tabbarStyle.Width(cb.window.Width).Render(row)
+	gap := tabGap.Render(strings.Repeat(" ", max(0, cb.window.Width-lg.Width(row)-2)))
 
-	doc.WriteString(out)
-	doc.WriteString("\n")
-	return doc.String()
+	row = lg.JoinHorizontal(
+		lg.Bottom,
+		row,
+		gap,
+	)
+
+	container := tabContainer.Width(cb.window.Width)
+
+	return container.Render(row)
+}
+
+func max(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
 }

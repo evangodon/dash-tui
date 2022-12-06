@@ -13,7 +13,7 @@ type ComponentBuilder struct {
 
 const (
 	titleHeight  = 2
-	tabbarHeight = 2
+	tabbarHeight = 3
 )
 
 func New(w Window) *ComponentBuilder {

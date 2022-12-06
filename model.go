@@ -98,9 +98,10 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 func (m model) View() string {
 	cb := ui.New(m.window)
 	doc := strings.Builder{}
-	doc.WriteString(ui.AppTitle("Dash tui"))
-	doc.WriteString("\n\n")
+	doc.WriteString(ui.AppTitle("Dash TUI"))
+	doc.WriteString("\n")
 	doc.WriteString(cb.BuildTabs(m.activeTab, m.tabs...))
+	doc.WriteString("\n")
 
 	activeModules := m.getActiveModules()
 
