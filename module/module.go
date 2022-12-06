@@ -51,9 +51,9 @@ func (m *Module) GetRenderedWidth() int {
 	return lg.Width(m.Output.String()) + borderWidth + paddingWidth
 }
 
-func (m *Module) GetRenderedHeight() int {
+func (m *Module) GetOutputHeight() int {
 	if m.Output == nil {
 		return 2
 	}
-	return lg.Height(m.Output.String()) + borderWidth + paddingWidth
+	return lg.Height(m.Output.String())
 }

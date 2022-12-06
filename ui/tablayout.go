@@ -3,7 +3,7 @@ package ui
 import (
 	"strings"
 
-	"github.com/charmbracelet/lipgloss"
+	lg "github.com/charmbracelet/lipgloss"
 
 	"github.com/evangodon/dash/module"
 )
@@ -25,7 +25,7 @@ func (cb ComponentBuilder) NewTabLayout(modules []*module.Module) string {
 	borderWidth := 2
 	for _, mod := range modules {
 		boxwidth := Max(mod.GetRenderedWidth(), len(mod.Title))
-		boxheight := mod.GetRenderedHeight()
+		boxheight := mod.GetOutputHeight()
 
 		if cb.window.Width > currentRow.width+boxwidth {
 			currentRow.AddModule(mod)
@@ -48,14 +48,19 @@ func (cb ComponentBuilder) NewTabLayout(modules []*module.Module) string {
 	for _, row := range rows {
 		boxes := []string{}
 		for _, item := range row.items {
+			gap := " "
 			newbox := cb.NewModuleBox(*item, row.height)
-			boxes = append(boxes, newbox)
+			boxes = append(boxes, gap, newbox)
 		}
 
-		rendered := lipgloss.JoinHorizontal(lipgloss.Top, boxes...)
+		rendered := lg.JoinHorizontal(lg.Top, boxes...)
 		doc.WriteString(rendered)
 		doc.WriteString("\n")
 	}
 
-	return doc.String()
+	height := cb.window.Height - titleHeight - tabbarHeight
+	s := doc.String()
+	container := lg.NewStyle().MaxHeight(height)
+
+	return container.Render(s)
 }
