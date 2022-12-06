@@ -2,7 +2,6 @@ package ui
 
 import (
 	lg "github.com/charmbracelet/lipgloss"
-
 	"github.com/evangodon/dash/module"
 )
 
@@ -14,7 +13,7 @@ var boxStyle = lg.NewStyle().
 
 func (cb ComponentBuilder) NewModuleBox(mod module.Module, height int) string {
 	b := newBoxWithTitle()
-	width := max(mod.GetRenderedOutput(), len(mod.Title)+2)
+	width := Max(mod.GetRenderedWidth(), len(mod.Title)+2)
 
 	return b.Render(mod.Title, mod.Output.String(), width, height)
 }

@@ -18,18 +18,16 @@ func (r *row) AddModule(module *module.Module) {
 	r.items = append(r.items, module)
 }
 
-// TODO: clean this up
-// TODO: update the module.GetWidth method
 func (cb ComponentBuilder) NewTabLayout(modules []*module.Module) string {
 
 	rows := []row{}
 	currentRow := row{}
 	borderWidth := 2
 	for _, mod := range modules {
-		boxwidth := max(lipgloss.Width(mod.Output.String()), len(mod.Title))
-		boxheight := lipgloss.Height(mod.Output.String())
+		boxwidth := Max(mod.GetRenderedWidth(), len(mod.Title))
+		boxheight := mod.GetRenderedHeight()
 
-		if cb.window.Width > currentRow.width+boxwidth+borderWidth {
+		if cb.window.Width > currentRow.width+boxwidth {
 			currentRow.AddModule(mod)
 			currentRow.width += boxwidth + borderWidth
 			if boxheight > currentRow.height {

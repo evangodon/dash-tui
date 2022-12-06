@@ -44,9 +44,16 @@ var (
 	paddingWidth = 2
 )
 
-func (m *Module) GetRenderedOutput() int {
+func (m *Module) GetRenderedWidth() int {
 	if m.Output == nil {
 		return 0
 	}
 	return lg.Width(m.Output.String()) + borderWidth + paddingWidth
+}
+
+func (m *Module) GetRenderedHeight() int {
+	if m.Output == nil {
+		return 2
+	}
+	return lg.Height(m.Output.String()) + borderWidth + paddingWidth
 }

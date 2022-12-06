@@ -19,6 +19,7 @@ func newBoxWithTitle() BoxWithLabel {
 			Padding(0, 1),
 
 		LabelStyle: lg.NewStyle().
+			Foreground(color.border).
 			PaddingTop(0).
 			PaddingBottom(0).
 			PaddingLeft(1).
@@ -39,7 +40,7 @@ func (b BoxWithLabel) Render(label, content string, width int, height int) strin
 	)
 
 	borderWidth := b.BoxStyle.GetHorizontalBorderSize()
-	cellsShort := max(0, width+borderWidth-lg.Width(topLeft+topRight+renderedLabel))
+	cellsShort := Max(0, width+borderWidth-lg.Width(topLeft+topRight+renderedLabel))
 	gap := strings.Repeat(border.Top, cellsShort)
 	top := topLeft + renderedLabel + topBorderStyler(gap) + topRight
 
@@ -52,7 +53,7 @@ func (b BoxWithLabel) Render(label, content string, width int, height int) strin
 	return top + "\n" + bottom
 }
 
-func max(a, b int) int {
+func Max(a, b int) int {
 	if a > b {
 		return a
 	}
