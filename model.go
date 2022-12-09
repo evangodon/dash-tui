@@ -21,8 +21,7 @@ type model struct {
 
 type modch chan module.Module
 
-func initialModel() model {
-	cfg := newConfig()
+func initialModel(cfg *config) model {
 	return model{
 		activeTab:     0,
 		activeTabName: cfg.Tabs[0],
@@ -92,7 +91,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.KeyMsg:
 		return m.handleKey(msg)
 	case configUpdateMsg:
-		m.config = newConfig()
+		m.config.reload()
 		return m, m.runActiveModules()
 	}
 	return m, nil
