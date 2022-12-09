@@ -1,15 +1,18 @@
 # TODO
 
 - [ ] Validate config file and all modules
-- [ ] use xdg paths for config
 - [ ] Add loading state to modules
+
+- [ ] terminal doesn't clear after quitting and having opened config file
+- [ ] improve layout renderer
 
 ---
 
-- [ ] improve layout renderer
 - [ ] Add status bar at bottom
 
 # IN-PROGRESS
+
+- [ ] use xdg paths for config
 
 # DONE
 
