@@ -2,7 +2,6 @@ package module
 
 import (
 	"bytes"
-	"fmt"
 	"os/exec"
 
 	lg "github.com/charmbracelet/lipgloss"
@@ -17,9 +16,6 @@ type Module struct {
 }
 
 func (m *Module) Run() {
-	if m.Exec == "" {
-		panic(fmt.Errorf("file not set for module: %v", m.Title))
-	}
 	m.Output = new(bytes.Buffer)
 	cmd := exec.Command("sh", "-c", m.Exec)
 

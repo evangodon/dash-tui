@@ -3,6 +3,7 @@
 - [ ] Validate config file and all modules
 - [ ] use xdg paths for config
 - [ ] Add loading state to modules
+- [ ] Add CLICOLOR_FORCE
 
 ---
 
