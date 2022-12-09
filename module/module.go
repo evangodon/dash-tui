@@ -2,6 +2,7 @@ package module
 
 import (
 	"bytes"
+	"os"
 	"os/exec"
 
 	lg "github.com/charmbracelet/lipgloss"
@@ -19,6 +20,8 @@ func (m *Module) Run() {
 	m.Output = new(bytes.Buffer)
 	cmd := exec.Command("sh", "-c", m.Exec)
 
+	cmd.Env = os.Environ()
+	cmd.Env = append(cmd.Env, "CLICOLOR_FORCE=1")
 	cmd.Stdout = m.Output
 	cmd.Stderr = m.Output
 

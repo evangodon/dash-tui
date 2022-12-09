@@ -53,7 +53,7 @@ func (m model) getActiveModules() []*module.Module {
 	return activeModules
 }
 
-func runAllModules(m model) tea.Cmd {
+func (m model) runActiveModules() tea.Cmd {
 	return func() tea.Msg {
 		activeModules := m.getActiveModules()
 
@@ -69,28 +69,31 @@ func runAllModules(m model) tea.Cmd {
 	}
 }
 
-func waitForModuleUpdate(sub modch) tea.Cmd {
+func (m model) waitForModuleUpdate() tea.Cmd {
 	return func() tea.Msg {
-		return <-sub
+		return <-m.sub
 	}
 }
 
 func (m model) Init() tea.Cmd {
 	return tea.Batch(
-		waitForModuleUpdate(m.sub),
-		runAllModules(m),
+		m.waitForModuleUpdate(),
+		m.runActiveModules(),
 	)
 }
 
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case module.Module:
-		return m, waitForModuleUpdate(m.sub)
+		return m, m.waitForModuleUpdate()
 	case tea.WindowSizeMsg:
 		m.window.Height = msg.Height
 		m.window.Width = msg.Width
 	case tea.KeyMsg:
 		return m.handleKey(msg)
+	case configUpdateMsg:
+		m.config = newConfig()
+		return m, m.runActiveModules()
 	}
 	return m, nil
 }

@@ -3,7 +3,6 @@
 - [ ] Validate config file and all modules
 - [ ] use xdg paths for config
 - [ ] Add loading state to modules
-- [ ] Add CLICOLOR_FORCE
 
 ---
 
@@ -24,3 +23,5 @@
 - [x] Get true width and height of output
 - [?] Use viewport from bubbles lib to fix height
 - [x] Add layout engine
+- [x] Add CLICOLOR_FORCE
+- [ ] Add keybinding for opening config file

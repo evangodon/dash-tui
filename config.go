@@ -9,13 +9,18 @@ import (
 )
 
 type config struct {
-	Tabs    []string
-	Modules map[string]*module.Module
+	Tabs     []string
+	Modules  map[string]*module.Module
+	filePath string
 }
 
 func newConfig() *config {
-	var cfg config
-	f, err := ioutil.ReadFile("./config.toml")
+	var cfg = config{
+		Tabs:     []string{},
+		Modules:  map[string]*module.Module{},
+		filePath: "./config.toml",
+	}
+	f, err := ioutil.ReadFile(cfg.filePath)
 	if err != nil {
 		panic(err)
 	}
