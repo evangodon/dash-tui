@@ -4,15 +4,14 @@
 - [ ] Add loading state to modules
 
 - [ ] terminal doesn't clear after quitting and having opened config file
-- [ ] improve layout renderer
+- [ ] improve layout renderer, https://github.com/rivo/tview
+- [ ] Check if file has execution permissions,https://github.com/maaslalani/slides/blob/main/internal/file/file.go
 
 ---
 
 - [ ] Add status bar at bottom
 
 # IN-PROGRESS
-
-- [ ] use xdg paths for config
 
 # DONE
 
@@ -27,4 +26,6 @@
 - [?] Use viewport from bubbles lib to fix height
 - [x] Add layout engine
 - [x] Add CLICOLOR_FORCE
-- [ ] Add keybinding for opening config file
+- [x] Add keybinding for opening config file
+- [x] Create basic template for config
+- [x] use xdg paths for config

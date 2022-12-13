@@ -53,9 +53,28 @@ func (b BoxWithLabel) Render(label, content string, width int, height int) strin
 	return top + "\n" + bottom
 }
 
-func Max(a, b int) int {
-	if a > b {
+func Max(a int, rest ...int) int {
+	if len(rest) == 0 {
 		return a
 	}
-	return b
+	max := a
+	for _, num := range rest {
+		if num > max {
+			max = num
+		}
+	}
+	return max
+}
+
+func Min(a int, rest ...int) int {
+	if len(rest) == 0 {
+		return a
+	}
+	min := a
+	for _, num := range rest {
+		if min < num {
+			min = num
+		}
+	}
+	return min
 }

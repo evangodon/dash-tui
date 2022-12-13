@@ -14,6 +14,7 @@ type Module struct {
 	Exec   string
 	Output *bytes.Buffer
 	Error  error
+	Width  int
 }
 
 func (m *Module) Run() {
@@ -31,6 +32,7 @@ func (m *Module) Run() {
 	}
 }
 
+// GetWidthOfOutput returns the width of the output after running, not the actual box
 func (m *Module) GetWidthOfOutput() int {
 	if m.Output == nil {
 		return 0
@@ -43,9 +45,13 @@ var (
 	paddingWidth = 2
 )
 
+// GetRenderedWidth returns the actual width that the module will take
 func (m *Module) GetRenderedWidth() int {
 	if m.Output == nil {
-		return 0
+		return len(m.Title) + borderWidth + paddingWidth
+	}
+	if m.Width > 0 {
+		return m.Width
 	}
 	return lg.Width(m.Output.String()) + borderWidth + paddingWidth
 }

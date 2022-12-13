@@ -27,7 +27,7 @@ func (cb ComponentBuilder) NewTabLayout(modules []*module.Module) string {
 		boxwidth := Max(mod.GetRenderedWidth(), len(mod.Title))
 		boxheight := mod.GetOutputHeight()
 
-		if cb.window.Width > currentRow.width+boxwidth {
+		if cb.window.Width > currentRow.width+boxwidth+len(currentRow.items) {
 			currentRow.AddModule(mod)
 			currentRow.width += boxwidth + borderWidth
 			if boxheight > currentRow.height {

@@ -29,7 +29,7 @@ func (cb ComponentBuilder) BuildTabs(activeTab int, tabs ...string) string {
 		tabboxes...,
 	)
 
-	gap := tabGap.Render(strings.Repeat(" ", max(0, cb.window.Width-lg.Width(row)-2)))
+	gap := tabGap.Render(strings.Repeat(" ", Max(0, cb.window.Width-lg.Width(row)-2)))
 
 	row = lg.JoinHorizontal(
 		lg.Bottom,
@@ -40,11 +40,4 @@ func (cb ComponentBuilder) BuildTabs(activeTab int, tabs ...string) string {
 	container := tabContainer.Width(cb.window.Width)
 
 	return container.Render(row)
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
 }
