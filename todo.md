@@ -1,5 +1,6 @@
 # TODO
 
+- [ ] Fix opening config action https://gist.github.com/bashbunni/e3306e8633512d8134012028288212db
 - [ ] Add loading state to modules
 
 - [ ] improve layout renderer, https://github.com/rivo/tview
@@ -12,8 +13,6 @@
 - [ ] Add status bar at bottom
 
 # IN-PROGRESS
-
-- [ ] Validate config file and all modules
 
 # DONE
 
@@ -32,3 +31,4 @@
 - [x] Create basic template for config
 - [x] use xdg paths for config
 - [x] Update struct for config v2
+- [x] Validate config file and all modules

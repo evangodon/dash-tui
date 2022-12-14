@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	lg "github.com/charmbracelet/lipgloss"
+	"github.com/evangodon/dash/util"
 )
 
 type BoxWithLabel struct {
@@ -40,7 +41,7 @@ func (b BoxWithLabel) Render(label, content string, width int, height int) strin
 	)
 
 	borderWidth := b.BoxStyle.GetHorizontalBorderSize()
-	cellsShort := Max(0, width+borderWidth-lg.Width(topLeft+topRight+renderedLabel))
+	cellsShort := util.Max(0, width+borderWidth-lg.Width(topLeft+topRight+renderedLabel))
 	gap := strings.Repeat(border.Top, cellsShort)
 	top := topLeft + renderedLabel + topBorderStyler(gap) + topRight
 
@@ -51,30 +52,4 @@ func (b BoxWithLabel) Render(label, content string, width int, height int) strin
 		Render(content)
 
 	return top + "\n" + bottom
-}
-
-func Max(a int, rest ...int) int {
-	if len(rest) == 0 {
-		return a
-	}
-	max := a
-	for _, num := range rest {
-		if num > max {
-			max = num
-		}
-	}
-	return max
-}
-
-func Min(a int, rest ...int) int {
-	if len(rest) == 0 {
-		return a
-	}
-	min := a
-	for _, num := range rest {
-		if min < num {
-			min = num
-		}
-	}
-	return min
 }

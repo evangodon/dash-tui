@@ -6,6 +6,7 @@ import (
 	"os/exec"
 
 	lg "github.com/charmbracelet/lipgloss"
+	"github.com/evangodon/dash/util"
 )
 
 type Module struct {
@@ -54,13 +55,10 @@ var (
 
 // GetRenderedWidth returns the actual width that the module will take
 func (m *Module) GetRenderedWidth() int {
-	if m.Output == nil {
-		return len(m.GetTitle()) + borderWidth + paddingWidth
-	}
 	if m.Width > 0 {
 		return m.Width
 	}
-	return lg.Width(m.Output.String()) + borderWidth + paddingWidth
+	return util.Min(len(m.GetTitle()), lg.Width(m.Output.String())) + borderWidth + paddingWidth
 }
 
 func (m *Module) GetOutputHeight() int {

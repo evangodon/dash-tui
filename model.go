@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"strings"
 
 	tea "github.com/charmbracelet/bubbletea"
@@ -17,6 +18,7 @@ type model struct {
 	config        *config.Config
 	sub           chan moduleUpdateMsg
 	window        ui.Window
+	err           error
 }
 
 func initialModel(cfg *config.Config) model {
@@ -88,13 +90,27 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		return m.handleKey(msg)
 
 	case configUpdateMsg:
-		m.config.Reload()
+		if msg.err != nil {
+			m.err = msg.err
+			return m, tea.Quit
+		}
+
+		configErr := m.config.Reload()
+		if configErr != nil {
+			m.err = configErr
+			return m, tea.Quit
+		}
+
 		return m, m.runActiveModules()
 	}
 	return m, nil
 }
 
 func (m model) View() string {
+	if m.err != nil {
+		return fmt.Sprintf("Error occured: %v\n", m.err)
+	}
+
 	cb := ui.New(m.window)
 	doc := strings.Builder{}
 	doc.WriteString(ui.AppTitle("Dash TUI"))

@@ -6,6 +6,7 @@ import (
 	lg "github.com/charmbracelet/lipgloss"
 
 	"github.com/evangodon/dash/config"
+	"github.com/evangodon/dash/util"
 )
 
 type row struct {
@@ -24,7 +25,7 @@ func (cb ComponentBuilder) NewTabLayout(modules []*config.Module) string {
 	currentRow := row{}
 	borderWidth := 2
 	for _, mod := range modules {
-		boxwidth := Max(mod.GetRenderedWidth(), len(mod.Title))
+		boxwidth := util.Max(mod.GetRenderedWidth(), len(mod.Title))
 		boxheight := mod.GetOutputHeight()
 
 		if cb.window.Width > currentRow.width+boxwidth+len(currentRow.items) {

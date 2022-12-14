@@ -3,12 +3,14 @@ package config
 import (
 	"errors"
 	"flag"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
 
 	"github.com/BurntSushi/toml"
 	"github.com/adrg/xdg"
+	"golang.org/x/exp/slices"
 )
 
 type Config struct {
@@ -36,7 +38,8 @@ func New() (*Config, error) {
 	}
 
 	if *configPath != defaultConfigPath && !cfg.configFileExists() {
-		return nil, errors.New("config file not found")
+		r := fmt.Sprintf("no config file found at \"%s\"", *configPath)
+		return nil, &ConfigError{reason: r}
 	}
 
 	if !cfg.configFileExists() {
@@ -50,11 +53,11 @@ func New() (*Config, error) {
 
 	err = toml.Unmarshal(f, &cfg)
 	if err != nil {
-		return nil, err
+		return nil, &ConfigError{reason: err.Error()}
 	}
 
-	if len(cfg.Tabs) == 0 {
-		panic("Need at least one tab in config file")
+	if err := cfg.Validate(); err != nil {
+		return nil, err
 	}
 
 	return &cfg, nil
@@ -83,23 +86,69 @@ func (cfg *Config) mustCreateConfigFile() {
 	defer file.Close()
 }
 
-func (cfg *Config) Reload() {
+func (cfg *Config) Validate() *ConfigError {
+	if len(cfg.Tabs) == 0 {
+		return &ConfigError{
+			reason: "need at least one tab in config file",
+		}
+	}
+
+	for _, tab := range cfg.Tabs {
+		for _, modName := range tab.Modules {
+			_, err := cfg.GetModule(modName)
+			if err != nil {
+				foundModules := func() []string {
+					modules := make([]string, len(cfg.Modules))
+					for i, mod := range cfg.Modules {
+						modules[i] = mod.Name
+					}
+					return modules
+				}()
+				reason := fmt.Sprintf(
+					"Looked for module \"%s\" for tab \"%s\" but none exist in config file.\nModules Found %v",
+					modName,
+					tab.Name,
+					foundModules,
+				)
+				return &ConfigError{
+					reason: reason,
+				}
+			}
+		}
+	}
+
+	return nil
+}
+
+func (cfg *Config) GetModule(moduleName string) (*Module, error) {
+	idxModule := slices.IndexFunc(cfg.Modules, func(mod *Module) bool {
+		return mod.Name == moduleName
+	})
+
+	if idxModule == -1 {
+		return nil, errors.New("module not found")
+	}
+
+	return cfg.Modules[idxModule], nil
+}
+
+func (cfg *Config) Reload() error {
 	f, err := ioutil.ReadFile(cfg.FilePath)
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	err = toml.Unmarshal(f, &cfg)
 	if err != nil {
-		panic(err)
+		return err
 	}
+
+	if err := cfg.Validate(); err != nil {
+		return err
+	}
+
 	for _, mod := range cfg.Modules {
 		mod.Output = nil
 	}
-}
-
-func (cfg *Config) RunModules() {
-	for _, m := range cfg.Modules {
-		m.Run()
-	}
+	return nil
 }

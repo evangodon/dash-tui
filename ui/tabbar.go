@@ -5,6 +5,7 @@ import (
 
 	lg "github.com/charmbracelet/lipgloss"
 	"github.com/evangodon/dash/config"
+	"github.com/evangodon/dash/util"
 )
 
 var (
@@ -30,7 +31,7 @@ func (cb ComponentBuilder) BuildTabs(activeTab int, tabs ...config.Tab) string {
 		tabboxes...,
 	)
 
-	gap := tabGap.Render(strings.Repeat(" ", Max(0, cb.window.Width-lg.Width(row)-2)))
+	gap := tabGap.Render(strings.Repeat(" ", util.Max(0, cb.window.Width-lg.Width(row)-2)))
 
 	row = lg.JoinHorizontal(
 		lg.Bottom,
