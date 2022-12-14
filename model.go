@@ -19,6 +19,7 @@ type model struct {
 	sub           chan moduleUpdateMsg
 	window        ui.Window
 	err           error
+	openConfig    bool
 }
 
 func initialModel(cfg *config.Config) model {
@@ -101,6 +102,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, tea.Quit
 		}
 
+		m.openConfig = false
 		return m, m.runActiveModules()
 	}
 	return m, nil
@@ -109,6 +111,9 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 func (m model) View() string {
 	if m.err != nil {
 		return fmt.Sprintf("Error occured: %v\n", m.err)
+	}
+	if m.openConfig {
+		return ""
 	}
 
 	cb := ui.New(m.window)

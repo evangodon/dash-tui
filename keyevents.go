@@ -10,6 +10,7 @@ import (
 func (m model) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	switch msg.String() {
 	case "e":
+		m.openConfig = true
 		return m, m.openConfigInEditor()
 	case "tab":
 		m.activeTab = (m.activeTab + 1) % len(m.tabs)
