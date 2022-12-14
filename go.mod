@@ -8,6 +8,7 @@ require (
 	github.com/charmbracelet/bubbletea v0.23.1
 	github.com/charmbracelet/lipgloss v0.6.0
 	github.com/lucasb-eyer/go-colorful v1.2.0
+	golang.org/x/exp v0.0.0-20221212164502-fae10dda9338
 	golang.org/x/term v0.2.0
 )
 

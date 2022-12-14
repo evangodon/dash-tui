@@ -1,29 +1,20 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"log"
 	"os"
 
-	"github.com/adrg/xdg"
 	tea "github.com/charmbracelet/bubbletea"
-)
-
-var (
-	appName = "dashtui"
+	"github.com/evangodon/dash/config"
 )
 
 func main() {
 
-	defaultConfig, err := xdg.ConfigFile(appName + "/config.toml")
+	config, err := config.New()
 	if err != nil {
 		log.Fatal(err)
 	}
-	configPath := flag.String("config", defaultConfig, "config file")
-	flag.Parse()
-
-	config := newConfig(*configPath)
 
 	p := tea.NewProgram(initialModel(config), tea.WithAltScreen())
 	if _, err := p.Run(); err != nil {

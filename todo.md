@@ -1,17 +1,19 @@
 # TODO
 
-- [ ] Validate config file and all modules
 - [ ] Add loading state to modules
 
-- [ ] terminal doesn't clear after quitting and having opened config file
 - [ ] improve layout renderer, https://github.com/rivo/tview
 - [ ] Check if file has execution permissions,https://github.com/maaslalani/slides/blob/main/internal/file/file.go
+- [ ] Better logger
+- [ ] terminal doesn't clear after quitting and having opened config file
 
 ---
 
 - [ ] Add status bar at bottom
 
 # IN-PROGRESS
+
+- [ ] Validate config file and all modules
 
 # DONE
 
@@ -29,3 +31,4 @@
 - [x] Add keybinding for opening config file
 - [x] Create basic template for config
 - [x] use xdg paths for config
+- [x] Update struct for config v2

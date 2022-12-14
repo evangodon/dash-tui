@@ -5,20 +5,20 @@ import (
 
 	lg "github.com/charmbracelet/lipgloss"
 
-	"github.com/evangodon/dash/module"
+	"github.com/evangodon/dash/config"
 )
 
 type row struct {
-	items  []*module.Module
+	items  []*config.Module
 	width  int
 	height int
 }
 
-func (r *row) AddModule(module *module.Module) {
+func (r *row) AddModule(module *config.Module) {
 	r.items = append(r.items, module)
 }
 
-func (cb ComponentBuilder) NewTabLayout(modules []*module.Module) string {
+func (cb ComponentBuilder) NewTabLayout(modules []*config.Module) string {
 
 	rows := []row{}
 	currentRow := row{}
@@ -36,7 +36,7 @@ func (cb ComponentBuilder) NewTabLayout(modules []*module.Module) string {
 		} else {
 			rows = append(rows, currentRow)
 			currentRow = row{
-				items:  []*module.Module{mod},
+				items:  []*config.Module{mod},
 				width:  boxwidth,
 				height: boxheight,
 			}

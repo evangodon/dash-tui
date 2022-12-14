@@ -1,4 +1,4 @@
-package module
+package config
 
 import (
 	"bytes"
@@ -9,12 +9,19 @@ import (
 )
 
 type Module struct {
+	Name   string
 	Title  string
-	Tab    string
 	Exec   string
 	Output *bytes.Buffer
-	Error  error
 	Width  int
+	error  error
+}
+
+func (m *Module) GetTitle() string {
+	if m.Title != "" {
+		return m.Title
+	}
+	return m.Name
 }
 
 func (m *Module) Run() {
@@ -28,7 +35,7 @@ func (m *Module) Run() {
 
 	err := cmd.Run()
 	if err != nil {
-		m.Error = err
+		m.error = err
 	}
 }
 
@@ -48,7 +55,7 @@ var (
 // GetRenderedWidth returns the actual width that the module will take
 func (m *Module) GetRenderedWidth() int {
 	if m.Output == nil {
-		return len(m.Title) + borderWidth + paddingWidth
+		return len(m.GetTitle()) + borderWidth + paddingWidth
 	}
 	if m.Width > 0 {
 		return m.Width

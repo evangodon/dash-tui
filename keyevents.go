@@ -12,20 +12,15 @@ func (m model) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	case "e":
 		return m, m.openConfigInEditor()
 	case "tab":
-		if m.activeTab < len(m.tabs)-1 {
-			m.activeTab++
-		} else {
-			m.activeTab = 0
-		}
-		m.activeTabName = m.tabs[m.activeTab]
+		m.activeTab = (m.activeTab + 1) % len(m.tabs)
+		m.activeTabName = m.tabs[m.activeTab].Name
 		return m, m.runActiveModules()
 	case "shift+tab":
-		if m.activeTab > 0 {
-			m.activeTab--
-		} else {
+		m.activeTab--
+		if m.activeTab < 0 {
 			m.activeTab = len(m.tabs) - 1
 		}
-		m.activeTabName = m.tabs[m.activeTab]
+		m.activeTabName = m.tabs[m.activeTab].Name
 		return m, m.runActiveModules()
 	case "ctrl+c", "q":
 		return m, tea.Quit
@@ -39,7 +34,7 @@ func (m model) openConfigInEditor() tea.Cmd {
 	if editor == "" {
 		editor = "vi"
 	}
-	c := exec.Command(editor, m.config.filePath)
+	c := exec.Command(editor, m.config.FilePath)
 	return tea.ExecProcess(c, func(err error) tea.Msg {
 		return configUpdateMsg{err}
 	})

@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	lg "github.com/charmbracelet/lipgloss"
+	"github.com/evangodon/dash/config"
 )
 
 var (
@@ -14,14 +15,14 @@ var (
 			BorderRight(false)
 )
 
-func (cb ComponentBuilder) BuildTabs(activeTab int, tabs ...string) string {
+func (cb ComponentBuilder) BuildTabs(activeTab int, tabs ...config.Tab) string {
 	tabboxes := []string{}
 	for index, tab := range tabs {
 		if index == activeTab {
-			tabboxes = append(tabboxes, activeTabStyle.Render(tab))
+			tabboxes = append(tabboxes, activeTabStyle.Render(tab.Name))
 			continue
 		}
-		tabboxes = append(tabboxes, tabStyle.Render(tab))
+		tabboxes = append(tabboxes, tabStyle.Render(tab.Name))
 	}
 
 	row := lg.JoinHorizontal(
