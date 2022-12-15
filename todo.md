@@ -1,15 +1,11 @@
 # TODO
 
-- [ ] Fix opening config action https://gist.github.com/bashbunni/e3306e8633512d8134012028288212db
+- [ ] Add status bar at bottom
 - [ ] Add loading state to modules
 
 - [ ] improve layout renderer, https://github.com/rivo/tview
 - [ ] Check if file has execution permissions,https://github.com/maaslalani/slides/blob/main/internal/file/file.go
-- [ ] Better logger
-
----
-
-- [ ] Add status bar at bottom
+- [ ] Add ability to register keybindings
 
 # IN-PROGRESS
 
@@ -32,3 +28,5 @@
 - [x] Update struct for config v2
 - [x] Validate config file and all modules
 - [x] terminal doesn't clear after quitting and having opened config file
+- [x] Better logger
+- [x] Fix opening config action https://gist.github.com/bashbunni/e3306e8633512d8134012028288212db
