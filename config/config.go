@@ -138,6 +138,9 @@ func (cfg *Config) Reload() error {
 		return err
 	}
 
+	cfg.Modules = make([]*Module, 0)
+	cfg.Tabs = make([]Tab, 0)
+
 	err = toml.Unmarshal(f, &cfg)
 	if err != nil {
 		return err
@@ -147,8 +150,5 @@ func (cfg *Config) Reload() error {
 		return err
 	}
 
-	for _, mod := range cfg.Modules {
-		mod.Output = nil
-	}
 	return nil
 }
