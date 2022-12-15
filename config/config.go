@@ -2,10 +2,8 @@ package config
 
 import (
 	"errors"
-	"flag"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"os"
 
 	"github.com/BurntSushi/toml"
@@ -23,22 +21,23 @@ var (
 	appName = "dashtui"
 )
 
-func New() (*Config, error) {
+func New(configPath string) (*Config, error) {
 	defaultConfigPath, err := xdg.ConfigFile(appName + "/config.toml")
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
-	configPath := flag.String("config", defaultConfigPath, "config file")
-	flag.Parse()
+	if configPath == "" {
+		configPath = defaultConfigPath
+	}
 
 	var cfg = Config{
 		Tabs:     []Tab{},
 		Modules:  []*Module{},
-		FilePath: *configPath,
+		FilePath: configPath,
 	}
 
-	if *configPath != defaultConfigPath && !cfg.configFileExists() {
-		r := fmt.Sprintf("no config file found at \"%s\"", *configPath)
+	if configPath != defaultConfigPath && !cfg.configFileExists() {
+		r := fmt.Sprintf("config file not found at \"%s\"", configPath)
 		return nil, &ConfigError{reason: r}
 	}
 

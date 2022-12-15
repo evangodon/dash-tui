@@ -4,14 +4,13 @@ import (
 	"log"
 	"os"
 
-	"github.com/charmbracelet/lipgloss"
-
 	"github.com/evangodon/dash/config"
+	"github.com/evangodon/dash/ui"
 )
 
-var (
-	errorTitle = lipgloss.NewStyle().Foreground(lipgloss.Color("#f38ba8")).Bold(true).Render
-)
+func errorTitle(msg string) string {
+	return ui.BoldText(ui.RedText(msg))
+}
 
 func logError(err error) {
 	l := log.New(os.Stdout, "", 0)
