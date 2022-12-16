@@ -1,5 +1,6 @@
 # TODO
 
+- [ ] cd to config folder for running module scripts
 - [ ] Add status bar at bottom
 - [ ] Add loading state to modules
 

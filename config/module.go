@@ -6,6 +6,7 @@ import (
 	"os/exec"
 
 	lg "github.com/charmbracelet/lipgloss"
+
 	"github.com/evangodon/dash/util"
 )
 
@@ -30,7 +31,10 @@ func (m *Module) Run() {
 	cmd := exec.Command("sh", "-c", m.Exec)
 
 	cmd.Env = os.Environ()
+	// Preserve ANSI Colors
 	cmd.Env = append(cmd.Env, "CLICOLOR_FORCE=1")
+	//  Force terminal style output for gh
+	cmd.Env = append(cmd.Env, "GH_FORCE_TTY=true")
 	cmd.Stdout = m.Output
 	cmd.Stderr = m.Output
 
