@@ -1,5 +1,9 @@
 package util
 
+func Clamp(min, val, max int) int {
+	return Max(min, Min(val, max))
+}
+
 func Max(a int, rest ...int) int {
 	if len(rest) == 0 {
 		return a
@@ -19,7 +23,7 @@ func Min(a int, rest ...int) int {
 	}
 	min := a
 	for _, num := range rest {
-		if min < num {
+		if num < min {
 			min = num
 		}
 	}

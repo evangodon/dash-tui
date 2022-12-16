@@ -12,6 +12,7 @@ import (
 
 func main() {
 	configPath := flag.String("config", "", "config file")
+	initialtab := flag.Int("tab", 1, "index of initial active tab")
 	calcdimensions := flag.Bool("dimensions", false, "calculate dimensions of all modules")
 	flag.Parse()
 
@@ -28,7 +29,7 @@ func main() {
 		os.Exit(0)
 	}
 
-	p := tea.NewProgram(initialModel(config), tea.WithAltScreen())
+	p := tea.NewProgram(initialModel(config, *initialtab), tea.WithAltScreen())
 	if _, err := p.Run(); err != nil {
 		logError(err)
 	}

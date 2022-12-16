@@ -9,6 +9,7 @@ import (
 
 	"github.com/evangodon/dash/config"
 	"github.com/evangodon/dash/ui"
+	"github.com/evangodon/dash/util"
 )
 
 type model struct {
@@ -22,10 +23,12 @@ type model struct {
 	openConfig    bool
 }
 
-func initialModel(cfg *config.Config) model {
+func initialModel(cfg *config.Config, initialTab int) model {
+
+	initialTab = util.Clamp(0, initialTab-1, len(cfg.Tabs)-1)
 	return model{
-		activeTab:     0,
-		activeTabName: cfg.Tabs[0].Name,
+		activeTab:     initialTab,
+		activeTabName: cfg.Tabs[initialTab].Name,
 		tabs:          cfg.Tabs,
 		config:        cfg,
 		sub:           make(chan moduleUpdateMsg),

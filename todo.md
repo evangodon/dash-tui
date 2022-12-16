@@ -3,10 +3,12 @@
 - [ ] cd to config folder for running module scripts
 - [ ] Add status bar at bottom
 - [ ] Add loading state to modules
-
-- [ ] improve layout renderer, https://github.com/rivo/tview
 - [ ] Check if file has execution permissions,https://github.com/maaslalani/slides/blob/main/internal/file/file.go
 - [ ] Add ability to register keybindings
+- [ ] Rethink usage of space at top of dashboard
+- [ ] Tabs don't update on config reload
+
+- [ ] improve layout renderer, https://github.com/rivo/tview
 
 # IN-PROGRESS
 
@@ -20,7 +22,6 @@
 - [x] Prevent mutation of modules?
 - [x] create modulebox with title
 - [x] Get true width and height of output
-- [?] Use viewport from bubbles lib to fix height
 - [x] Add layout engine
 - [x] Add CLICOLOR_FORCE
 - [x] Add keybinding for opening config file

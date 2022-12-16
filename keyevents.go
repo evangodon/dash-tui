@@ -12,11 +12,11 @@ func (m model) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	case "e":
 		m.openConfig = true
 		return m, m.openConfigInEditor()
-	case "tab":
+	case "tab", "l":
 		m.activeTab = (m.activeTab + 1) % len(m.tabs)
 		m.activeTabName = m.tabs[m.activeTab].Name
 		return m, m.runActiveModules()
-	case "shift+tab":
+	case "shift+tab", "h":
 		m.activeTab--
 		if m.activeTab < 0 {
 			m.activeTab = len(m.tabs) - 1
