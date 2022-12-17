@@ -92,7 +92,14 @@ func (cfg *Config) Validate() *ConfigError {
 		}
 	}
 
-	for _, tab := range cfg.Tabs {
+	for i, tab := range cfg.Tabs {
+		if tab.Name == "" {
+			r := fmt.Sprintf("tab at index %d needs a name of length of 1 or more", i)
+			return &ConfigError{
+				reason: r,
+			}
+		}
+
 		for _, modName := range tab.Modules {
 			_, err := cfg.GetModule(modName)
 			if err != nil {
