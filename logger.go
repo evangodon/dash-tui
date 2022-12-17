@@ -21,7 +21,7 @@ var errorContainer = lipgloss.NewStyle().
 	Render
 
 func logError(err error) {
-	l := log.New(os.Stdout, "", 0)
+	l := log.New(os.Stderr, "", 0)
 	var errType string
 	var msg string
 
@@ -35,6 +35,5 @@ func logError(err error) {
 		msg = fmt.Sprintf("%s\n%s", errType, t.Error())
 	}
 
-	l.Printf(msg)
-	os.Exit(1)
+	l.Fatal(msg)
 }

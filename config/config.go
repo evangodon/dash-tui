@@ -7,7 +7,6 @@ import (
 	"os"
 
 	"github.com/BurntSushi/toml"
-	"github.com/adrg/xdg"
 	"golang.org/x/exp/slices"
 )
 
@@ -17,18 +16,7 @@ type Config struct {
 	FilePath string
 }
 
-var (
-	appName = "dashtui"
-)
-
 func New(configPath string) (*Config, error) {
-	defaultConfigPath, err := xdg.ConfigFile(appName + "/config.toml")
-	if err != nil {
-		return nil, err
-	}
-	if configPath == "" {
-		configPath = defaultConfigPath
-	}
 
 	var cfg = Config{
 		Tabs:     []Tab{},
@@ -36,7 +24,7 @@ func New(configPath string) (*Config, error) {
 		FilePath: configPath,
 	}
 
-	if configPath != defaultConfigPath && !cfg.configFileExists() {
+	if !cfg.configFileExists() {
 		r := fmt.Sprintf("config file not found at \"%s\"", configPath)
 		return nil, &ConfigError{reason: r}
 	}
