@@ -111,7 +111,7 @@ func (cfg *Config) Validate() *ConfigError {
 					return modules
 				}()
 				reason := fmt.Sprintf(
-					"Looked for module \"%s\" for tab \"%s\" but none exist in config file.\nModules Found %v",
+					"Looked for module \"%s\" for tab \"%s\" but none exist in config file.\nModules Found: %v",
 					modName,
 					tab.Name,
 					foundModules,
