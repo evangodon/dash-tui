@@ -13,3 +13,13 @@
 - tickets
 - Github PRs
 - Todo list
+
+# Grid layout ideas
+
+[[tab]]
+name = " Home"
+modules = [
+["Weather", "Calendar"],[],
+["agenda-today", "default-todo"],[],
+]
+columns = 2

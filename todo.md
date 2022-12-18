@@ -1,14 +1,15 @@
 # TODO
 
+- [ ] Tabs don't update on config reload, nor do the modules
 - [ ] cd to config folder for running module scripts
 - [ ] Add status bar at bottom
 - [ ] Add loading state to modules
 - [ ] Check if file has execution permissions,https://github.com/maaslalani/slides/blob/main/internal/file/file.go
 - [ ] Add ability to register keybindings
 - [ ] Rethink usage of space at top of dashboard
-- [ ] Tabs don't update on config reload
-
 - [ ] improve layout renderer, https://github.com/rivo/tview
+- [ ] use cli lib for adding commands https://github.com/cristalhq/acmd
+- [ ] Use Go template for adding secrets
 
 # IN-PROGRESS
 
