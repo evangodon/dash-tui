@@ -11,12 +11,13 @@ import (
 )
 
 type Module struct {
-	Name   string
-	Title  string
-	Exec   string
-	Output *bytes.Buffer
-	Width  int
-	error  error
+	Name      string
+	Title     string
+	Exec      string
+	Output    *bytes.Buffer
+	Width     int
+	Err       *ModuleError
+	configDir string
 }
 
 func (m *Module) GetTitle() string {
@@ -28,19 +29,27 @@ func (m *Module) GetTitle() string {
 
 func (m *Module) Run() {
 	m.Output = new(bytes.Buffer)
+
 	cmd := exec.Command("sh", "-c", m.Exec)
 
 	cmd.Env = os.Environ()
 	// Preserve ANSI Colors
-	cmd.Env = append(cmd.Env, "CLICOLOR_FORCE=1")
-	//  Force terminal style output for gh
-	cmd.Env = append(cmd.Env, "GH_FORCE_TTY=true")
+	cmd.Env = append(cmd.Env, "CLICOLOR_FORCE=1", "GH_FORCE_TTY=true")
 	cmd.Stdout = m.Output
 	cmd.Stderr = m.Output
+	cmd.Dir = m.configDir
 
 	err := cmd.Run()
 	if err != nil {
-		m.error = err
+		var code int
+		if exiterr, ok := err.(*exec.ExitError); ok {
+			code = exiterr.ExitCode()
+		}
+
+		m.Err = &ModuleError{
+			Exitcode: code,
+			output:   m.Output.String(),
+		}
 	}
 }
 

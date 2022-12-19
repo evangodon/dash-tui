@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"path/filepath"
 
 	"github.com/BurntSushi/toml"
 	"golang.org/x/exp/slices"
@@ -45,6 +46,10 @@ func New(configPath string) (*Config, error) {
 
 	if err := cfg.Validate(); err != nil {
 		return nil, err
+	}
+
+	for _, mod := range cfg.Modules {
+		mod.configDir = filepath.Dir(cfg.FilePath)
 	}
 
 	return &cfg, nil
