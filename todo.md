@@ -1,7 +1,5 @@
 # TODO
 
-- [ ] Tabs don't update on config reload, nor do the modules
-- [ ] cd to config folder for running module scripts
 - [ ] Add status bar at bottom
 - [ ] Add loading state to modules
 - [ ] Check if file has execution permissions,https://github.com/maaslalani/slides/blob/main/internal/file/file.go
@@ -13,7 +11,7 @@
 
 # IN-PROGRESS
 
-- [ ] Create module error
+- [x] cd to config folder for running module scripts
 
 # DONE
 
@@ -35,3 +33,4 @@
 - [x] terminal doesn't clear after quitting and having opened config file
 - [x] Better logger
 - [x] Fix opening config action https://gist.github.com/bashbunni/e3306e8633512d8134012028288212db
+- [x] Create module error

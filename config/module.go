@@ -11,13 +11,13 @@ import (
 )
 
 type Module struct {
-	Name      string
-	Title     string
-	Exec      string
-	Output    *bytes.Buffer
-	Width     int
-	Err       *ModuleError
-	configDir string
+	Name   string
+	Title  string
+	Exec   string
+	Output *bytes.Buffer
+	Width  int
+	Err    *ModuleError
+	Dir    string
 }
 
 func (m *Module) GetTitle() string {
@@ -37,7 +37,7 @@ func (m *Module) Run() {
 	cmd.Env = append(cmd.Env, "CLICOLOR_FORCE=1", "GH_FORCE_TTY=true")
 	cmd.Stdout = m.Output
 	cmd.Stderr = m.Output
-	cmd.Dir = m.configDir
+	cmd.Dir = m.Dir
 
 	err := cmd.Run()
 	if err != nil {

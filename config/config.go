@@ -49,10 +49,23 @@ func New(configPath string) (*Config, error) {
 	}
 
 	for _, mod := range cfg.Modules {
-		mod.configDir = filepath.Dir(cfg.FilePath)
+		if mod.Dir == "" {
+			mod.Dir = filepath.Dir(cfg.FilePath)
+		}
+		if mod.Dir == "." {
+			mod.Dir = cfg.getCWD()
+		}
 	}
 
 	return &cfg, nil
+}
+
+func (cfg *Config) getCWD() string {
+	path, err := os.Getwd()
+	if err != nil {
+		panic(err)
+	}
+	return path
 }
 
 func (cfg *Config) configFileExists() bool {
@@ -131,6 +144,7 @@ func (cfg *Config) GetModule(moduleName string) (*Module, error) {
 	return cfg.Modules[idxModule], nil
 }
 
+// TODO refactor duplicate code here and in New()
 func (cfg *Config) Reload() error {
 	f, err := ioutil.ReadFile(cfg.FilePath)
 	if err != nil {
@@ -147,6 +161,10 @@ func (cfg *Config) Reload() error {
 
 	if err := cfg.Validate(); err != nil {
 		return err
+	}
+
+	for _, mod := range cfg.Modules {
+		mod.Dir = filepath.Dir(cfg.FilePath)
 	}
 
 	return nil

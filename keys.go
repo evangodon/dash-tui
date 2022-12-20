@@ -12,6 +12,15 @@ func (m model) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	case "e":
 		m.openConfig = true
 		return m, m.openConfigInEditor()
+	case "r":
+		return m, m.runActiveModules()
+	case "R":
+		configErr := m.config.Reload()
+		if configErr != nil {
+			m.err = configErr
+			return m, tea.Quit
+		}
+		return m, m.runActiveModules()
 	case "tab", "l":
 		m.activeTab = (m.activeTab + 1) % len(m.tabs)
 		m.activeTabName = m.tabs[m.activeTab].Name
