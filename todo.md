@@ -1,8 +1,8 @@
 # TODO
 
-- [ ] Add status bar at bottom
 - [ ] Add loading state to modules
-- [ ] Check if file has execution permissions,https://github.com/maaslalani/slides/blob/main/internal/file/file.go
+- [ ] Check if file has execution permissions
+      https://github.com/maaslalani/slides/blob/main/internal/file/file.go
 - [ ] Add ability to register keybindings
 - [ ] Rethink usage of space at top of dashboard
 - [ ] improve layout renderer, https://github.com/rivo/tview
@@ -10,8 +10,6 @@
 - [ ] Use Go template for adding secrets
 
 # IN-PROGRESS
-
-- [x] cd to config folder for running module scripts
 
 # DONE
 
@@ -34,3 +32,5 @@
 - [x] Better logger
 - [x] Fix opening config action https://gist.github.com/bashbunni/e3306e8633512d8134012028288212db
 - [x] Create module error
+- [x] cd to config folder for running module scripts
+- [x] Add status bar at bottom

@@ -59,9 +59,9 @@ func (cb ComponentBuilder) NewTabLayout(modules []*config.Module) string {
 		doc.WriteString("\n")
 	}
 
-	height := cb.window.Height - titleHeight - tabbarHeight
+	height := cb.window.Height - titleHeight - tabbarHeight - helpbarheight
 	s := doc.String()
-	container := lg.NewStyle().MaxHeight(height)
+	container := lg.NewStyle().Height(height).MaxHeight(height)
 
 	return container.Render(s)
 }
