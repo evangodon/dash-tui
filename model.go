@@ -99,7 +99,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, tea.Quit
 		}
 
-		configErr := m.config.Reload()
+		configErr := m.config.ReadConfig()
 		if configErr != nil {
 			m.err = configErr
 			return m, tea.Quit

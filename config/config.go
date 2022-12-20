@@ -34,18 +34,26 @@ func New(configPath string) (*Config, error) {
 		cfg.mustCreateConfigFile()
 	}
 
+	cfg.ReadConfig()
+
+	return &cfg, nil
+}
+
+func (cfg *Config) ReadConfig() error {
 	f, err := ioutil.ReadFile(cfg.FilePath)
 	if err != nil {
-		return nil, err
+		return err
 	}
+	cfg.Modules = make([]*Module, 0)
+	cfg.Tabs = make([]Tab, 0)
 
 	err = toml.Unmarshal(f, &cfg)
 	if err != nil {
-		return nil, &ConfigError{reason: err.Error()}
+		return &ConfigError{reason: err.Error()}
 	}
 
 	if err := cfg.Validate(); err != nil {
-		return nil, err
+		return err
 	}
 
 	for _, mod := range cfg.Modules {
@@ -57,7 +65,7 @@ func New(configPath string) (*Config, error) {
 		}
 	}
 
-	return &cfg, nil
+	return nil
 }
 
 func (cfg *Config) getCWD() string {
@@ -142,30 +150,4 @@ func (cfg *Config) GetModule(moduleName string) (*Module, error) {
 	}
 
 	return cfg.Modules[idxModule], nil
-}
-
-// TODO refactor duplicate code here and in New()
-func (cfg *Config) Reload() error {
-	f, err := ioutil.ReadFile(cfg.FilePath)
-	if err != nil {
-		return err
-	}
-
-	cfg.Modules = make([]*Module, 0)
-	cfg.Tabs = make([]Tab, 0)
-
-	err = toml.Unmarshal(f, &cfg)
-	if err != nil {
-		return err
-	}
-
-	if err := cfg.Validate(); err != nil {
-		return err
-	}
-
-	for _, mod := range cfg.Modules {
-		mod.Dir = filepath.Dir(cfg.FilePath)
-	}
-
-	return nil
 }

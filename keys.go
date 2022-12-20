@@ -15,7 +15,7 @@ func (m model) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	case "r":
 		return m, m.runActiveModules()
 	case "R":
-		configErr := m.config.Reload()
+		configErr := m.config.ReadConfig()
 		if configErr != nil {
 			m.err = configErr
 			return m, tea.Quit
