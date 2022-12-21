@@ -25,7 +25,7 @@ func (r *row) AddModule(module *config.Module) {
 	r.items = append(r.items, module)
 }
 
-func (m model) NewTabLayout(modules []*config.Module) string {
+func (m model) NewGrid(modules []*config.Module) string {
 
 	rows := []row{}
 	currentRow := row{}

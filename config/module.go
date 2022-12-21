@@ -91,3 +91,7 @@ func (m *Module) GetOutputHeight() int {
 	}
 	return lg.Height(m.Output.String())
 }
+
+func (m *Module) Status() Status {
+	return m.status
+}

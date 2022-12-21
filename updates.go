@@ -1,6 +1,8 @@
 package main
 
 import (
+	"sync"
+
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/evangodon/dash/config"
 	"golang.org/x/exp/slices"
@@ -27,24 +29,27 @@ type runOptions struct {
 	force bool
 }
 
+// Start spinner ticking and run all modules
 func (m model) runActiveModules(options runOptions) tea.Cmd {
-	return func() tea.Msg {
-		activeModules := m.getActiveModules()
+	var wg sync.WaitGroup
 
+	return tea.Batch(m.spinner.Tick, func() tea.Msg {
+		activeModules := m.getActiveModules()
 		for _, activeMod := range activeModules {
 			if activeMod.Output == nil || options.force {
+				wg.Add(1)
 				go func(activeMod *config.Module) {
 					activeMod.Run()
 					m.sub <- moduleUpdateMsg{}
+					wg.Done()
 				}(activeMod)
 			}
 		}
-		return nil
-	}
+		wg.Wait()
+		return modulesDone{}
+	})
 }
 
-func (m model) waitForModuleUpdate() tea.Cmd {
-	return func() tea.Msg {
-		return <-m.sub
-	}
+func (m model) waitForModuleUpdate() tea.Msg {
+	return <-m.sub
 }

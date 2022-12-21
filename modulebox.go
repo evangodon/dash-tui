@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"strings"
 
 	lg "github.com/charmbracelet/lipgloss"
@@ -9,14 +10,18 @@ import (
 	"github.com/evangodon/dash/util"
 )
 
-func (model) NewModuleBox(mod config.Module, height int) string {
+func (m model) NewModuleBox(mod config.Module, height int) string {
 	b := NewBoxWithTitle()
 	content := mod.Output.String()
 	if mod.Err != nil {
 		content = mod.Err.String()
 	}
+	title := mod.GetTitle()
+	if mod.Status() == config.StatusLoading {
+		title = fmt.Sprintf("%s %s", title, m.spinner.View())
+	}
 
-	return b.Render(mod.GetTitle(), content, mod.GetRenderedWidth(), height)
+	return b.Render(title, content, mod.GetRenderedWidth(), height)
 }
 
 type BoxWithLabel struct {
