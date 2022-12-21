@@ -18,7 +18,16 @@ type Module struct {
 	Width  int
 	Err    *ModuleError
 	Dir    string
+	status Status
 }
+
+type Status int
+
+const (
+	StatusInitial Status = iota
+	StatusLoading
+	StatusFinished
+)
 
 func (m *Module) GetTitle() string {
 	if m.Title != "" {
@@ -39,7 +48,9 @@ func (m *Module) Run() {
 	cmd.Stderr = m.Output
 	cmd.Dir = m.Dir
 
+	m.status = StatusLoading
 	err := cmd.Run()
+	m.status = StatusFinished
 	if err != nil {
 		var code int
 		if exiterr, ok := err.(*exec.ExitError); ok {

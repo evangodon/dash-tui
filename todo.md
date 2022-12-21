@@ -1,6 +1,5 @@
 # TODO
 
-- [ ] Add loading state to modules
 - [ ] Check if file has execution permissions
       https://github.com/maaslalani/slides/blob/main/internal/file/file.go
 - [ ] Add ability to register keybindings
@@ -8,8 +7,11 @@
 - [ ] improve layout renderer, https://github.com/rivo/tview
 - [ ] use cli lib for adding commands https://github.com/cristalhq/acmd
 - [ ] Use Go template for adding secrets
+- [ ] Use string for width so you can add "full" for fullwidth
 
 # IN-PROGRESS
+
+- [ ] Add loading state to modules
 
 # DONE
 

@@ -1,26 +1,38 @@
-package ui
+package main
 
 import (
 	"strings"
 
 	lg "github.com/charmbracelet/lipgloss"
+	"github.com/evangodon/dash/config"
+	"github.com/evangodon/dash/ui"
 	"github.com/evangodon/dash/util"
 )
+
+func (model) NewModuleBox(mod config.Module, height int) string {
+	b := NewBoxWithTitle()
+	content := mod.Output.String()
+	if mod.Err != nil {
+		content = mod.Err.String()
+	}
+
+	return b.Render(mod.GetTitle(), content, mod.GetRenderedWidth(), height)
+}
 
 type BoxWithLabel struct {
 	BoxStyle   lg.Style
 	LabelStyle lg.Style
 }
 
-func newBoxWithTitle() BoxWithLabel {
+func NewBoxWithTitle() BoxWithLabel {
 	return BoxWithLabel{
 		BoxStyle: lg.NewStyle().
 			Border(lg.RoundedBorder()).
-			BorderForeground(color.border).
+			BorderForeground(ui.Color.Border).
 			Padding(0, 1),
 
 		LabelStyle: lg.NewStyle().
-			Foreground(color.border).
+			Foreground(ui.Color.Border).
 			PaddingTop(0).
 			PaddingBottom(0).
 			PaddingLeft(1).
