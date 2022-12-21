@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/charmbracelet/bubbles/help"
+	"github.com/charmbracelet/bubbles/spinner"
 	tea "github.com/charmbracelet/bubbletea"
 
 	"github.com/evangodon/dash/config"
@@ -22,6 +23,7 @@ type model struct {
 	err           error
 	configOpen    bool
 	help          help.Model
+	spinner       spinner.Model
 }
 
 func initialModel(cfg *config.Config, initialTab int) model {
@@ -41,6 +43,7 @@ func (m model) Init() tea.Cmd {
 	return tea.Batch(
 		m.waitForModuleUpdate(),
 		m.runActiveModules(runOptions{}),
+		m.spinner.Tick,
 	)
 }
 
