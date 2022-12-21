@@ -13,13 +13,18 @@ import (
 	"github.com/evangodon/dash/util"
 )
 
+type window struct {
+	width  int
+	height int
+}
+
 type model struct {
 	activeTab     int
 	activeTabName string
 	tabs          []config.Tab
 	config        *config.Config
 	sub           chan moduleUpdateMsg
-	window        ui.Window
+	window        window
 	err           error
 	configOpen    bool
 	help          help.Model
@@ -53,8 +58,8 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		return m, m.waitForModuleUpdate()
 
 	case tea.WindowSizeMsg:
-		m.window.Height = msg.Height
-		m.window.Width = msg.Width
+		m.window.height = msg.Height
+		m.window.width = msg.Width
 		m.help.Width = msg.Width
 
 	case tea.KeyMsg:
@@ -86,16 +91,15 @@ func (m model) View() string {
 		return ""
 	}
 
-	cb := ui.New(m.window)
 	doc := strings.Builder{}
 	doc.WriteString(ui.AppTitle("Dash TUI"))
 	doc.WriteString("\n")
-	doc.WriteString(cb.BuildTabs(m.activeTab, m.tabs...))
+	doc.WriteString(m.BuildTabs(m.activeTab, m.tabs...))
 	doc.WriteString("\n")
 
 	activeModules := m.getActiveModules()
 
-	tab := cb.NewTabLayout(activeModules)
+	tab := m.NewTabLayout(activeModules)
 	doc.WriteString(tab)
 
 	helpBar := m.help.View(keys)
