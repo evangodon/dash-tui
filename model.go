@@ -8,7 +8,6 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 
 	"github.com/evangodon/dash/config"
-	"github.com/evangodon/dash/ui"
 	"github.com/evangodon/dash/util"
 )
 
@@ -100,13 +99,10 @@ func (m model) View() string {
 	}
 
 	doc := strings.Builder{}
-	doc.WriteString(ui.AppTitle("Dash TUI"))
-	doc.WriteString("\n")
 	doc.WriteString(m.BuildTabs(m.activeTab, m.tabs...))
 	doc.WriteString("\n")
 
 	activeModules := m.activeModules()
-
 	tab := m.NewGrid(activeModules)
 	doc.WriteString(tab)
 

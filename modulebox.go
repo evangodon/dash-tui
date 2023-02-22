@@ -20,8 +20,9 @@ func (m model) NewModuleBox(mod config.Module, height int) string {
 	if mod.Status() == config.StatusLoading {
 		title = fmt.Sprintf("%s %s", title, m.spinner.View())
 	}
+	width := util.Clamp(len(mod.Title), mod.GetRenderedWidth(), m.window.width-4)
 
-	return b.Render(title, content, mod.GetRenderedWidth(), height)
+	return b.Render(title, content, width, height)
 }
 
 type BoxWithLabel struct {

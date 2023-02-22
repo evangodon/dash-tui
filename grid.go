@@ -16,7 +16,6 @@ type row struct {
 }
 
 const (
-	titleHeight   = 2
 	tabbarHeight  = 3
 	helpbarheight = 1
 )
@@ -60,12 +59,12 @@ func (m model) NewGrid(modules []*config.Module) string {
 			boxes = append(boxes, gap, newbox)
 		}
 
-		rendered := lg.JoinHorizontal(lg.Top, boxes...)
-		doc.WriteString(rendered)
+		renderedRow := lg.JoinHorizontal(lg.Top, boxes...)
+		doc.WriteString(renderedRow)
 		doc.WriteString("\n")
 	}
 
-	height := m.window.height - titleHeight - tabbarHeight - helpbarheight
+	height := m.window.height - tabbarHeight - helpbarheight
 	s := doc.String()
 	container := lg.NewStyle().Height(height).MaxHeight(height)
 

@@ -82,7 +82,10 @@ func (m *Module) GetRenderedWidth() int {
 	if m.Width > 0 {
 		return m.Width
 	}
-	return util.Max(len(m.GetTitle()), lg.Width(m.Output.String())) + borderWidth + paddingWidth
+	titleLength := len(m.GetTitle())
+	moduleWidth := lg.Width(m.Output.String())
+
+	return util.Max(titleLength, moduleWidth) + borderWidth + paddingWidth
 }
 
 func (m *Module) GetOutputHeight() int {

@@ -7,9 +7,10 @@
 - [ ] use cli lib for adding commands https://github.com/cristalhq/acmd
 - [ ] Use Go template for adding secrets
 - [ ] Use string for width so you can add "full" for fullwidth
-- [ ] Ensure all modules running are killed on exit
 
 # IN-PROGRESS
+
+- [ ] Ensure all modules running are killed on exit
 
 # DONE
 
