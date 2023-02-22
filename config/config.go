@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/BurntSushi/toml"
 	"golang.org/x/exp/slices"
@@ -34,7 +35,9 @@ func New(configPath string) (*Config, error) {
 		cfg.mustCreateConfigFile()
 	}
 
-	cfg.ReadConfig()
+	if err := cfg.ReadConfig(); err != nil {
+		return nil, err
+	}
 
 	return &cfg, nil
 }
@@ -125,10 +128,10 @@ func (cfg *Config) Validate() *ConfigError {
 					return modules
 				}()
 				reason := fmt.Sprintf(
-					"Looked for module \"%s\" for tab \"%s\" but none exist in config file.\nModules Found: %v",
+					"Module \"%s\" for tab \"%s\" defined but none exist in config file.\nModules Found: %v",
 					modName,
 					tab.Name,
-					foundModules,
+					strings.Join(foundModules, ", "),
 				)
 				return &ConfigError{
 					reason: reason,

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"strings"
 
 	"github.com/charmbracelet/bubbles/help"
@@ -73,13 +72,13 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case configUpdateMsg:
 		if msg.err != nil {
 			m.err = msg.err
-			return m, tea.Quit
+			return m, nil
 		}
 
 		configErr := m.config.ReadConfig()
 		if configErr != nil {
 			m.err = configErr
-			return m, tea.Quit
+			return m, nil
 		}
 
 		m.configOpen = false
@@ -94,7 +93,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (m model) View() string {
 	if m.err != nil {
-		return fmt.Sprintf("Error occured: %v\n", m.err)
+		return styleError(m.err) + "\n Press e to edit config\n Press q to quit"
 	}
 	if m.configOpen {
 		return ""
@@ -106,7 +105,7 @@ func (m model) View() string {
 	doc.WriteString(m.BuildTabs(m.activeTab, m.tabs...))
 	doc.WriteString("\n")
 
-	activeModules := m.getActiveModules()
+	activeModules := m.activeModules()
 
 	tab := m.NewGrid(activeModules)
 	doc.WriteString(tab)

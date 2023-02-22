@@ -1,20 +1,20 @@
 # TODO
 
 - [ ] Check if file has execution permissions
-      https://github.com/maaslalani/slides/blob/main/internal/file/file.go
 - [ ] Add ability to register keybindings
 - [ ] Rethink usage of space at top of dashboard
 - [ ] improve layout renderer, https://github.com/rivo/tview
 - [ ] use cli lib for adding commands https://github.com/cristalhq/acmd
 - [ ] Use Go template for adding secrets
 - [ ] Use string for width so you can add "full" for fullwidth
+- [ ] Ensure all modules running are killed on exit
 
 # IN-PROGRESS
 
-- [ ] Add loading state to modules
-
 # DONE
 
+- [x] bug: app craches if names are more than one word
+- [x] Add loading state to modules
 - [x] build tabs
 - [x] Only run modules for current tab
 - [x] toml config file
@@ -36,3 +36,4 @@
 - [x] Create module error
 - [x] cd to config folder for running module scripts
 - [x] Add status bar at bottom
+

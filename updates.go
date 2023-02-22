@@ -9,7 +9,7 @@ import (
 )
 
 // Get modules that will be visible on this tab
-func (m model) getActiveModules() []*config.Module {
+func (m model) activeModules() []*config.Module {
 	allModules := m.config.Modules
 
 	activeTab := m.tabs[m.activeTab]
@@ -34,7 +34,7 @@ func (m model) runActiveModules(options runOptions) tea.Cmd {
 	var wg sync.WaitGroup
 
 	return tea.Batch(m.spinner.Tick, func() tea.Msg {
-		activeModules := m.getActiveModules()
+		activeModules := m.activeModules()
 		for _, activeMod := range activeModules {
 			if activeMod.Output == nil || options.force {
 				wg.Add(1)

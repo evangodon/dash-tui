@@ -20,20 +20,26 @@ var errorContainer = lipgloss.NewStyle().
 	Padding(0, 1).
 	Render
 
-func logError(err error) {
-	l := log.New(os.Stderr, "", 0)
-	var errType string
+func styleError(err error) string {
+	var errTitle string
 	var msg string
 
 	switch t := err.(type) {
 	case *config.ConfigError:
-		errType = errorTitle(t.Title())
-		msg = fmt.Sprintf("%s\n%s", errType, t.Error())
+		errTitle = errorTitle(t.Title())
+		msg = fmt.Sprintf("%s\n%s", errTitle, t.Error())
 		msg = errorContainer(msg)
 	default:
-		errType := errorTitle("Error")
-		msg = fmt.Sprintf("%s\n%s", errType, t.Error())
+		errTitle = errorTitle("Error")
+		msg = fmt.Sprintf("%s\n%s", errTitle, t.Error())
 	}
+	return msg
+}
+
+func logError(err error) {
+	l := log.New(os.Stderr, "", 0)
+
+	msg := styleError(err)
 
 	l.Fatal(msg)
 }

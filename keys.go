@@ -66,6 +66,7 @@ func (m model) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	switch {
 	case key.Matches(msg, keys.EditConfig):
 		m.configOpen = true
+		m.err = nil
 		return m, m.openConfigInEditor()
 	case key.Matches(msg, keys.ReloadModules):
 		return m, m.runActiveModules(runOptions{force: true})
