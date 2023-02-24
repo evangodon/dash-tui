@@ -6,7 +6,7 @@ import (
 )
 
 type ConfigError struct {
-	reason string
+	Reason string
 }
 
 func (ConfigError) Title() string {
@@ -14,7 +14,7 @@ func (ConfigError) Title() string {
 }
 
 func (cfgErr *ConfigError) Error() string {
-	return cfgErr.reason
+	return cfgErr.Reason
 }
 
 type ModuleError struct {

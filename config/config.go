@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
 
@@ -13,9 +14,10 @@ import (
 )
 
 type Config struct {
-	Tabs     []Tab     `toml:"tab"`
-	Modules  []*Module `toml:"module"`
-	FilePath string
+	Tabs         []Tab     `toml:"tab"`
+	Modules      []*Module `toml:"module"`
+	Dependencies []string  `toml:"dependencies"`
+	FilePath     string
 }
 
 func New(configPath string) (*Config, error) {
@@ -24,15 +26,6 @@ func New(configPath string) (*Config, error) {
 		Tabs:     []Tab{},
 		Modules:  []*Module{},
 		FilePath: configPath,
-	}
-
-	if !cfg.configFileExists() {
-		r := fmt.Sprintf("config file not found at \"%s\"", configPath)
-		return nil, &ConfigError{reason: r}
-	}
-
-	if !cfg.configFileExists() {
-		cfg.mustCreateConfigFile()
 	}
 
 	if err := cfg.ReadConfig(); err != nil {
@@ -52,7 +45,7 @@ func (cfg *Config) ReadConfig() error {
 
 	err = toml.Unmarshal(f, &cfg)
 	if err != nil {
-		return &ConfigError{reason: err.Error()}
+		return &ConfigError{Reason: err.Error()}
 	}
 
 	if err := cfg.Validate(); err != nil {
@@ -103,9 +96,18 @@ func (cfg *Config) mustCreateConfigFile() {
 }
 
 func (cfg *Config) Validate() *ConfigError {
+	for _, dep := range cfg.Dependencies {
+		_, err := exec.LookPath(dep)
+		if err != nil {
+			return &ConfigError{
+				Reason: err.Error(),
+			}
+		}
+	}
+
 	if len(cfg.Tabs) == 0 {
 		return &ConfigError{
-			reason: "need at least one tab in config file",
+			Reason: "need at least one tab in config file",
 		}
 	}
 
@@ -113,7 +115,7 @@ func (cfg *Config) Validate() *ConfigError {
 		if tab.Name == "" {
 			r := fmt.Sprintf("tab at index %d needs a name of length of 1 or more", i)
 			return &ConfigError{
-				reason: r,
+				Reason: r,
 			}
 		}
 
@@ -134,7 +136,7 @@ func (cfg *Config) Validate() *ConfigError {
 					strings.Join(foundModules, ", "),
 				)
 				return &ConfigError{
-					reason: reason,
+					Reason: reason,
 				}
 			}
 		}

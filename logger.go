@@ -14,11 +14,12 @@ func errorTitle(msg string) string {
 	return ui.BoldText(ui.RedText(msg))
 }
 
-var errorContainer = lipgloss.NewStyle().
-	Border(lipgloss.RoundedBorder()).
-	BorderForeground(ui.ColorError).
-	Padding(0, 1).
-	Render
+var errorContainer = ui.NewBoxWithTitle(ui.WithBoxStyle(
+	lipgloss.NewStyle().
+		Border(lipgloss.RoundedBorder()).
+		BorderForeground(ui.ColorError).
+		Padding(0, 1),
+))
 
 func styleError(err error) string {
 	var errTitle string
@@ -28,11 +29,13 @@ func styleError(err error) string {
 	case *config.ConfigError:
 		errTitle = errorTitle(t.Title())
 		msg = fmt.Sprintf("%s\n%s", errTitle, t.Error())
-		msg = errorContainer(msg)
+		content := ui.RedText(t.Error())
+		msg = errorContainer.Render(errTitle, content, lipgloss.Width(content)+2, lipgloss.Height(content))
 	default:
 		errTitle = errorTitle("Error")
 		msg = fmt.Sprintf("%s\n%s", errTitle, t.Error())
 	}
+
 	return msg
 }
 

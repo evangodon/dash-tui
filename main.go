@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"os"
 
 	"github.com/adrg/xdg"
@@ -16,19 +17,26 @@ var (
 	appName = "dashtui"
 )
 
+var defaultConfigPath string
+var configErr error
+
+func init() {
+	defaultConfigPath, configErr = xdg.ConfigFile(appName + "/config.toml")
+	if configErr != nil {
+		logError(configErr)
+	}
+}
+
 func main() {
-	configPath := flag.String("config", "", "config file")
+	configPath := flag.String("config", defaultConfigPath, "config file")
 	openConfig := flag.Bool("open-config", false, "open config file")
 	initialtab := flag.Int("tab", 1, "index of initial active tab")
 	calcdimensions := flag.Bool("dimensions", false, "calculate dimensions of all modules")
 	flag.Parse()
 
-	defaultConfigPath, err := xdg.ConfigFile(appName + "/config.toml")
-	if err != nil {
-		logError(err)
-	}
-	if *configPath == "" {
-		*configPath = defaultConfigPath
+	if exists := util.FileExists(*configPath); !exists {
+		r := fmt.Sprintf("config file not found at \"%s\"", *configPath)
+		logError(&config.ConfigError{Reason: r})
 	}
 
 	config, err := config.New(*configPath)
