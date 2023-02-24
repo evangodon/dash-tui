@@ -2,8 +2,10 @@ package config
 
 import (
 	"bytes"
+	"context"
 	"os"
 	"os/exec"
+	"time"
 
 	lg "github.com/charmbracelet/lipgloss"
 
@@ -29,6 +31,8 @@ const (
 	StatusFinished
 )
 
+const cmdTimeout = 8 * time.Second
+
 func (m *Module) GetTitle() string {
 	if m.Title != "" {
 		return m.Title
@@ -39,7 +43,9 @@ func (m *Module) GetTitle() string {
 func (m *Module) Run() {
 	m.Output = new(bytes.Buffer)
 
-	cmd := exec.Command("sh", "-c", m.Exec)
+	ctx, cancel := context.WithTimeout(context.Background(), cmdTimeout)
+	defer cancel()
+	cmd := exec.CommandContext(ctx, "bash", "-c", m.Exec)
 
 	cmd.Env = os.Environ()
 	// Preserve ANSI Colors
@@ -49,7 +55,9 @@ func (m *Module) Run() {
 	cmd.Dir = m.Dir
 
 	m.status = StatusLoading
+
 	err := cmd.Run()
+
 	m.status = StatusFinished
 	if err != nil {
 		var code int
@@ -57,9 +65,14 @@ func (m *Module) Run() {
 			code = exiterr.ExitCode()
 		}
 
+		output := m.Output.String()
+		if output == "" {
+			output = err.Error()
+		}
+
 		m.Err = &ModuleError{
 			Exitcode: code,
-			output:   m.Output.String(),
+			output:   output,
 		}
 	}
 }

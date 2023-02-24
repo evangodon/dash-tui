@@ -2,18 +2,17 @@
 
 - [ ] Check if file has execution permissions
 - [ ] Add ability to register keybindings
-- [ ] Rethink usage of space at top of dashboard
 - [ ] improve layout renderer, https://github.com/rivo/tview
 - [ ] use cli lib for adding commands https://github.com/cristalhq/acmd
 - [ ] Use Go template for adding secrets
-- [ ] Use string for width so you can add "full" for fullwidth
 
 # IN-PROGRESS
 
-- [ ] Ensure all modules running are killed on exit
-
 # DONE
 
+- [x] Ensure all modules running are killed on exit
+- [x] Rethink usage of space at top of dashboard
+- [x] Use string for width so you can add "full" for fullwidth
 - [x] bug: app craches if names are more than one word
 - [x] Add loading state to modules
 - [x] build tabs

@@ -13,10 +13,11 @@ import (
 func (m model) NewModuleBox(mod config.Module, height int) string {
 	b := NewBoxWithTitle()
 	content := mod.Output.String()
-	if mod.Err != nil {
-		content = mod.Err.String()
-	}
 	title := mod.GetTitle()
+
+	if mod.Err != nil {
+		content = ui.RedText(mod.Err.String())
+	}
 	if mod.Status() == config.StatusLoading {
 		title = fmt.Sprintf("%s %s", title, m.spinner.View())
 	}
