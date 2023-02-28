@@ -11,11 +11,11 @@ type colors struct {
 }
 
 var Color = colors{
-	Primary: lg.AdaptiveColor{Light: "#874BFD", Dark: "#7D56F4"},
-	Border:  lg.AdaptiveColor{Light: "#bcc0cc", Dark: "#a6adc8"},
-	Green:   lg.AdaptiveColor{Light: "#a6e3a1", Dark: "#a6e3a1"},
-	Yellow:  lg.AdaptiveColor{Light: "#f9e2af", Dark: "#f9e2af"},
-	Red:     lg.AdaptiveColor{Light: "#f38ba8", Dark: "#f38ba8"},
+	Primary: lg.AdaptiveColor{Light: "#1e66f5	", Dark: "#89b4fa"},
+	Border: lg.AdaptiveColor{Light: "#bcc0cc", Dark: "#a6adc8"},
+	Green:  lg.AdaptiveColor{Light: "#a6e3a1", Dark: "#a6e3a1"},
+	Yellow: lg.AdaptiveColor{Light: "#f9e2af", Dark: "#f9e2af"},
+	Red:    lg.AdaptiveColor{Light: "#f38ba8", Dark: "#f38ba8"},
 }
 
 var (

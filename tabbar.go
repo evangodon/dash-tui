@@ -7,9 +7,9 @@ package main
 import (
 	"strings"
 
+	"github.com/charmbracelet/lipgloss"
 	lg "github.com/charmbracelet/lipgloss"
 	"github.com/evangodon/dash/config"
-	"github.com/evangodon/dash/ui"
 	"github.com/evangodon/dash/util"
 )
 
@@ -23,12 +23,13 @@ var (
 
 func (m model) BuildTabs(activeTab int, tabs ...config.Tab) string {
 	tabboxes := []string{}
+	borderColor := lipgloss.Color(m.config.Settings.PrimaryColor)
 	for index, tab := range tabs {
 		if index == activeTab {
-			tabboxes = append(tabboxes, activeTabStyle.Render(tab.Name))
+			tabboxes = append(tabboxes, activeTabStyle.BorderForeground(borderColor).Render(tab.Name))
 			continue
 		}
-		tabboxes = append(tabboxes, tabStyle.Render(tab.Name))
+		tabboxes = append(tabboxes, tabStyle.BorderForeground(borderColor).Render(tab.Name))
 	}
 
 	row := lg.JoinHorizontal(
@@ -36,7 +37,7 @@ func (m model) BuildTabs(activeTab int, tabs ...config.Tab) string {
 		tabboxes...,
 	)
 
-	gap := tabGap.Render(strings.Repeat(" ", util.Max(0, m.window.width-lg.Width(row)-2)))
+	gap := tabGap.BorderForeground(borderColor).Render(strings.Repeat(" ", util.Max(0, m.window.width-lg.Width(row)-2)))
 
 	row = lg.JoinHorizontal(
 		lg.Bottom,
@@ -79,8 +80,7 @@ var tabBottomBorder = lg.Border{
 
 var tabStyle = lg.NewStyle().
 	Padding(0, 1).
-	Border(tabBorder, true).
-	BorderForeground(ui.Color.Primary)
+	Border(tabBorder, true)
 
 var activeTabStyle = tabStyle.Copy().
 	Border(activeTabBorder, true).

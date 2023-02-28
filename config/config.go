@@ -10,6 +10,7 @@ import (
 	"strings"
 
 	"github.com/BurntSushi/toml"
+	"github.com/evangodon/dash/ui"
 	"golang.org/x/exp/slices"
 )
 
@@ -18,6 +19,11 @@ type Config struct {
 	Modules      []*Module `toml:"module"`
 	Dependencies []string  `toml:"dependencies"`
 	FilePath     string
+	Settings     Settings `toml:"settings"`
+}
+
+type Settings struct {
+	PrimaryColor string `toml:"primary-color"`
 }
 
 func New(configPath string) (*Config, error) {
@@ -61,6 +67,10 @@ func (cfg *Config) ReadConfig() error {
 		}
 	}
 
+	if cfg.Settings.PrimaryColor == "" {
+		cfg.Settings.PrimaryColor = ui.Color.Primary.Dark
+	}
+
 	return nil
 }
 
@@ -96,6 +106,7 @@ func (cfg *Config) mustCreateConfigFile() {
 }
 
 func (cfg *Config) Validate() *ConfigError {
+	// Validate Dependencies
 	for _, dep := range cfg.Dependencies {
 		_, err := exec.LookPath(dep)
 		if err != nil {
@@ -111,6 +122,7 @@ func (cfg *Config) Validate() *ConfigError {
 		}
 	}
 
+	// Validate Tabs
 	for i, tab := range cfg.Tabs {
 		if tab.Name == "" {
 			r := fmt.Sprintf("tab at index %d needs a name of length of 1 or more", i)
@@ -138,6 +150,15 @@ func (cfg *Config) Validate() *ConfigError {
 				return &ConfigError{
 					Reason: reason,
 				}
+			}
+		}
+	}
+
+	// Validate Settings
+	if primaryColor := cfg.Settings.PrimaryColor; primaryColor != "" {
+		if len(primaryColor) != 7 || primaryColor[0] != '#' {
+			return &ConfigError{
+				Reason: fmt.Sprintf("Colors should be of format #ffffff, got %s", primaryColor),
 			}
 		}
 	}

@@ -3,13 +3,19 @@ package main
 import (
 	"fmt"
 
+	"github.com/charmbracelet/lipgloss"
+	lg "github.com/charmbracelet/lipgloss"
 	"github.com/evangodon/dash/config"
 	"github.com/evangodon/dash/ui"
 	"github.com/evangodon/dash/util"
 )
 
 func (m model) NewModuleBox(mod config.Module, height int) string {
-	b := ui.NewBoxWithTitle()
+	borderColor := lipgloss.Color(m.config.Settings.PrimaryColor)
+	b := ui.NewBoxWithTitle(ui.WithBoxStyle(lg.NewStyle().
+		Border(lg.RoundedBorder()).
+		BorderForeground(borderColor).
+		Padding(0, 1)))
 	content := mod.Output.String()
 	title := mod.GetTitle()
 

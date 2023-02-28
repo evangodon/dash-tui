@@ -24,7 +24,7 @@ func NewBoxWithTitle(opts ...Option) BoxWithLabel {
 	box := BoxWithLabel{
 		BoxStyle: lg.NewStyle().
 			Border(lg.RoundedBorder()).
-			BorderForeground(Color.Border).
+			BorderForeground(Color.Primary).
 			Padding(0, 1),
 
 		LabelStyle: lg.NewStyle().
