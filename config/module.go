@@ -1,13 +1,16 @@
 package config
 
 import (
+	"bufio"
 	"bytes"
 	"context"
+	"io"
 	"os"
 	"os/exec"
 	"time"
 
 	lg "github.com/charmbracelet/lipgloss"
+	"github.com/creack/pty"
 
 	"github.com/evangodon/dash/util"
 )
@@ -48,15 +51,41 @@ func (m *Module) Run() {
 	cmd := exec.CommandContext(ctx, "bash", "-c", m.Exec)
 
 	cmd.Env = os.Environ()
-	// Preserve ANSI Colors
-	cmd.Env = append(cmd.Env, "CLICOLOR_FORCE=1", "GH_FORCE_TTY=true")
-	cmd.Stdout = m.Output
-	cmd.Stderr = m.Output
 	cmd.Dir = m.Dir
-
 	m.status = StatusLoading
 
-	err := cmd.Run()
+	tty, err := pty.Start(cmd)
+	if err != nil {
+		panic(err)
+	}
+	defer tty.Close()
+
+	go func() {
+		buf := bufio.NewReader(tty)
+		f, _ := os.Create("./git-log.txt")
+		defer f.Close()
+
+		for {
+			line, _, err := buf.ReadLine()
+
+			if err == io.EOF {
+				break
+			}
+
+			if err != nil {
+				break
+			}
+
+			line = bytes.TrimSpace(line)
+			line = bytes.Replace(line, []byte("[?1h"), []byte(""), -1)
+			m.Output.Write(line)
+			m.Output.Write([]byte("\n"))
+
+			f.Write(line)
+			f.Write([]byte("\n"))
+		}
+	}()
+	cmd.Wait()
 
 	m.status = StatusFinished
 	if err != nil {
