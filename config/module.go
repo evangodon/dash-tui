@@ -62,8 +62,6 @@ func (m *Module) Run() {
 
 	go func() {
 		buf := bufio.NewReader(tty)
-		f, _ := os.Create("./git-log.txt")
-		defer f.Close()
 
 		for {
 			line, _, err := buf.ReadLine()
@@ -80,9 +78,6 @@ func (m *Module) Run() {
 			line = bytes.Replace(line, []byte("[?1h"), []byte(""), -1)
 			m.Output.Write(line)
 			m.Output.Write([]byte("\n"))
-
-			f.Write(line)
-			f.Write([]byte("\n"))
 		}
 	}()
 	cmd.Wait()
