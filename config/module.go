@@ -71,11 +71,12 @@ func (m *Module) Run() {
 			}
 
 			if err != nil {
+				// Works on Mac but input/output error on Linux
+				// log.Fatal(err.Error())
 				break
 			}
 
-			line = bytes.TrimSpace(line)
-			line = bytes.Replace(line, []byte("[?1h"), []byte(""), -1)
+			line = cleanOutput(line)
 			m.Output.Write(line)
 			m.Output.Write([]byte("\n"))
 		}
@@ -134,4 +135,10 @@ func (m *Module) GetOutputHeight() int {
 
 func (m *Module) Status() Status {
 	return m.status
+}
+
+func cleanOutput(b []byte) []byte {
+	new := bytes.TrimSpace(b)
+	new = bytes.Replace(new, []byte("[?1h"), []byte(""), -1)
+	return new
 }
