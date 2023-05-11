@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"sync"
 
 	tea "github.com/charmbracelet/bubbletea"
@@ -38,18 +39,32 @@ func (m model) runActiveModules(options runOptions) tea.Cmd {
 		for _, activeMod := range activeModules {
 			if activeMod.Output == nil || options.force {
 				wg.Add(1)
+				ctx, cancel := context.WithTimeout(context.Background(), config.CmdTimeout)
+				defer cancel()
+				done := make(chan bool, 1)
+
 				go func(activeMod *config.Module) {
-					activeMod.Run()
-					m.sub <- moduleUpdateMsg{}
-					wg.Done()
+					activeMod.Run(ctx, done)
+					for {
+						select {
+						case <-done:
+							wg.Done()
+							m.modulesCh <- moduleUpdateMsg{}
+							break
+						// Cancel module execution if tab changes
+						case <-m.tabChangeCh:
+							cancel()
+							break
+						}
+					}
 				}(activeMod)
 			}
 		}
 		wg.Wait()
-		return modulesDone{}
+		return modulesDoneMsg{}
 	})
 }
 
 func (m model) waitForModuleUpdate() tea.Msg {
-	return <-m.sub
+	return <-m.modulesCh
 }

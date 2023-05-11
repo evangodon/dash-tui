@@ -80,6 +80,7 @@ func (m model) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	case key.Matches(msg, keys.NextTab):
 		m.activeTab = (m.activeTab + 1) % len(m.tabs)
 		m.activeTabName = m.tabs[m.activeTab].Name
+		m.tabChangeCh <- tabChangeMsg{}
 		return m, m.runActiveModules(runOptions{})
 	case key.Matches(msg, keys.PrevTab):
 		m.activeTab--
@@ -87,6 +88,7 @@ func (m model) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 			m.activeTab = len(m.tabs) - 1
 		}
 		m.activeTabName = m.tabs[m.activeTab].Name
+		m.tabChangeCh <- tabChangeMsg{}
 		return m, m.runActiveModules(runOptions{})
 	case key.Matches(msg, keys.Help):
 		m.help.ShowAll = !m.help.ShowAll

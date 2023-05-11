@@ -5,7 +5,7 @@ import (
 	"bytes"
 	"context"
 	"io"
-	"os"
+	"log"
 	"os/exec"
 	"time"
 
@@ -34,7 +34,7 @@ const (
 	StatusFinished
 )
 
-const cmdTimeout = 8 * time.Second
+const CmdTimeout = 8 * time.Second
 
 func (m *Module) GetTitle() string {
 	if m.Title != "" {
@@ -43,14 +43,11 @@ func (m *Module) GetTitle() string {
 	return m.Name
 }
 
-func (m *Module) Run() {
+// Run the module script
+func (m *Module) Run(ctx context.Context, done chan bool) {
 	m.Output = new(bytes.Buffer)
-
-	ctx, cancel := context.WithTimeout(context.Background(), cmdTimeout)
-	defer cancel()
 	cmd := exec.CommandContext(ctx, "bash", "-c", m.Exec)
 
-	cmd.Env = os.Environ()
 	cmd.Dir = m.Dir
 	m.status = StatusLoading
 
@@ -65,20 +62,20 @@ func (m *Module) Run() {
 
 		for {
 			line, _, err := buf.ReadLine()
-
 			if err == io.EOF {
 				break
 			}
 
 			if err != nil {
-				// Works on Mac but input/output error on Linux
-				// log.Fatal(err.Error())
+				log.Fatal(err.Error())
 				break
 			}
 
 			line = cleanOutput(line)
-			m.Output.Write(line)
-			m.Output.Write([]byte("\n"))
+			if len(string(line)) > 0 {
+				m.Output.Write(line)
+				m.Output.Write([]byte("\n"))
+			}
 		}
 	}()
 	cmd.Wait()
@@ -100,6 +97,7 @@ func (m *Module) Run() {
 			output:   output,
 		}
 	}
+	done <- true
 }
 
 // GetWidthOfOutput returns the width of the output after running, not the actual box
@@ -138,7 +136,5 @@ func (m *Module) Status() Status {
 }
 
 func cleanOutput(b []byte) []byte {
-	new := bytes.TrimSpace(b)
-	new = bytes.Replace(new, []byte("[?1h"), []byte(""), -1)
-	return new
+	return b
 }

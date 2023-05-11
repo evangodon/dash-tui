@@ -1,6 +1,7 @@
 package dimensions
 
 import (
+	"context"
 	"strconv"
 	"sync"
 
@@ -36,8 +37,12 @@ func (m model) runAllModules() tea.Msg {
 	var wg sync.WaitGroup
 	for _, mod := range m.config.Modules {
 		wg.Add(1)
+		ctx, cancel := context.WithTimeout(context.Background(), config.CmdTimeout)
+		defer cancel()
+		done := make(chan bool, 1)
+
 		go func(mod *config.Module) {
-			mod.Run()
+			mod.Run(ctx, done)
 			m.sub <- moduleUpdateMsg{}
 			wg.Done()
 		}(mod)

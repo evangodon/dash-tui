@@ -1,5 +1,7 @@
 # TODO
 
+- [ ] Formatting of gh command, spinner should be ignored
+
 - [ ] Check if file has execution permissions
 - [ ] Add ability to register keybindings
 - [ ] improve layout renderer, https://github.com/rivo/tview
@@ -36,4 +38,4 @@
 - [x] Create module error
 - [x] cd to config folder for running module scripts
 - [x] Add status bar at bottom
-
+- [x] Cancel module when changing tab

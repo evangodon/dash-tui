@@ -21,7 +21,8 @@ type model struct {
 	activeTabName string
 	tabs          []config.Tab
 	config        *config.Config
-	sub           chan moduleUpdateMsg
+	modulesCh     chan moduleUpdateMsg
+	tabChangeCh   chan tabChangeMsg
 	window        window
 	err           error
 	configOpen    bool
@@ -38,7 +39,8 @@ func initialModel(cfg *config.Config, initialTab int) model {
 		activeTabName: cfg.Tabs[initialTab].Name,
 		tabs:          cfg.Tabs,
 		config:        cfg,
-		sub:           make(chan moduleUpdateMsg),
+		modulesCh:     make(chan moduleUpdateMsg),
+		tabChangeCh:   make(chan tabChangeMsg),
 		help:          help.New(),
 		spinner:       s,
 	}
@@ -55,7 +57,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case moduleUpdateMsg:
 		return m, m.waitForModuleUpdate
-	case modulesDone:
+	case modulesDoneMsg:
 		m.spinner = spinner.New()
 		return m, nil
 
